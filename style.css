@@ -1,0 +1,290 @@
+:root {
+  color-scheme: dark;
+  --bg: #15100c;
+  --panel: #21170f;
+  --panel-soft: #2c1f15;
+  --brass: #c69b4f;
+  --brass-dim: #8a6838;
+  --crt: #9bf5b2;
+  --crt-dim: #4e9f66;
+  --danger: #ff6b5f;
+  --text: #f3e7d1;
+  --muted: #b8a990;
+  --shadow: rgba(0, 0, 0, 0.45);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top left, rgba(198, 155, 79, 0.18), transparent 28rem),
+    radial-gradient(circle at bottom right, rgba(155, 245, 178, 0.08), transparent 24rem),
+    var(--bg);
+  color: var(--text);
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+button {
+  font: inherit;
+}
+
+.game-shell {
+  width: min(1120px, calc(100% - 2rem));
+  margin: 0 auto;
+  padding: 2rem 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.75fr);
+  gap: 1.25rem;
+}
+
+.safe-panel,
+.computer-module {
+  border: 1px solid rgba(198, 155, 79, 0.38);
+  border-radius: 24px;
+  background: linear-gradient(145deg, rgba(44, 31, 21, 0.98), rgba(24, 17, 12, 0.98));
+  box-shadow: 0 28px 70px var(--shadow), inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+  padding: 1.5rem;
+}
+
+.brand-row,
+.module-header,
+.controls-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.eyebrow,
+.status-pill,
+.module-light {
+  margin: 0;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  font-size: 0.74rem;
+}
+
+.eyebrow {
+  color: var(--muted);
+}
+
+.status-pill,
+.module-light {
+  border: 1px solid rgba(155, 245, 178, 0.35);
+  border-radius: 999px;
+  color: var(--crt);
+  background: rgba(155, 245, 178, 0.08);
+  padding: 0.45rem 0.7rem;
+}
+
+.status-pill.bad,
+.module-light.bad {
+  color: var(--danger);
+  border-color: rgba(255, 107, 95, 0.45);
+  background: rgba(255, 107, 95, 0.08);
+}
+
+h1 {
+  margin: 1rem 0 0.2rem;
+  font-size: clamp(2.6rem, 8vw, 5.8rem);
+  line-height: 0.9;
+  color: var(--brass);
+  text-shadow: 0 8px 28px rgba(0, 0, 0, 0.6);
+}
+
+h2 {
+  margin: 0 0 0.8rem;
+  color: var(--brass);
+  font-size: 1rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.tagline {
+  max-width: 42rem;
+  margin: 0 0 1.5rem;
+  color: var(--muted);
+  font-size: 1.08rem;
+}
+
+.safe-face {
+  display: grid;
+  place-items: center;
+  padding: 1.1rem 0 1.35rem;
+}
+
+.outer-ring {
+  width: min(58vw, 320px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background:
+    repeating-conic-gradient(from -8deg, #d7ae61 0 4deg, #7e5c2f 4deg 8deg),
+    radial-gradient(circle, #d5a757, #60451f 68%, #24170e 69%);
+  padding: 1rem;
+  box-shadow: inset 0 0 34px rgba(0, 0, 0, 0.7), 0 22px 44px rgba(0, 0, 0, 0.45);
+}
+
+.inner-ring {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: radial-gradient(circle, #2c2118 0 38%, #110c09 39% 100%);
+  display: grid;
+  place-items: center;
+  border: 9px solid rgba(24, 16, 9, 0.82);
+}
+
+.dial-cap {
+  width: 44%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: var(--brass);
+  background: radial-gradient(circle, #4b3521, #17100a 72%);
+  border: 2px solid rgba(198, 155, 79, 0.45);
+  letter-spacing: 0.16em;
+  font-weight: bold;
+}
+
+.code-entry,
+.dial-pad,
+.diagnostics {
+  border-top: 1px solid rgba(198, 155, 79, 0.22);
+  padding-top: 1.1rem;
+  margin-top: 1.1rem;
+}
+
+.slots {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(70px, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.slot {
+  min-height: 78px;
+  border-radius: 16px;
+  border: 1px solid rgba(198, 155, 79, 0.42);
+  background: rgba(0, 0, 0, 0.22);
+  display: grid;
+  place-items: center;
+  font-size: 2.3rem;
+  color: var(--crt);
+  box-shadow: inset 0 0 18px rgba(155, 245, 178, 0.08);
+}
+
+.slot.empty {
+  color: rgba(184, 169, 144, 0.55);
+}
+
+.controls-row button,
+.dial-buttons button {
+  border: 1px solid rgba(198, 155, 79, 0.48);
+  border-radius: 12px;
+  background: linear-gradient(180deg, #3e2d1d, #20150d);
+  color: var(--text);
+  cursor: pointer;
+  box-shadow: 0 8px 14px rgba(0, 0, 0, 0.22);
+}
+
+.controls-row button {
+  flex: 1;
+  padding: 0.8rem 1rem;
+}
+
+#openButton {
+  color: #15100c;
+  background: linear-gradient(180deg, #e7bd70, #9f753b);
+  font-weight: bold;
+}
+
+.dial-buttons {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.65rem;
+}
+
+.dial-buttons button {
+  min-height: 58px;
+  font-size: 1.2rem;
+}
+
+.dial-buttons button:hover:not(:disabled),
+.controls-row button:hover {
+  transform: translateY(-1px);
+  border-color: rgba(255, 221, 158, 0.75);
+}
+
+.dial-buttons button:disabled {
+  opacity: 0.38;
+  cursor: not-allowed;
+}
+
+.result {
+  min-height: 1.5rem;
+  margin: 0;
+  color: var(--muted);
+}
+
+.result.open {
+  color: var(--crt);
+}
+
+.result.locked {
+  color: var(--danger);
+}
+
+.computer-module {
+  font-family: "Courier New", monospace;
+  background:
+    linear-gradient(rgba(155, 245, 178, 0.04) 50%, transparent 50%) 0 0 / 100% 4px,
+    linear-gradient(145deg, rgba(15, 31, 19, 0.98), rgba(7, 13, 9, 0.98));
+  border-color: rgba(155, 245, 178, 0.28);
+}
+
+.computer-module h2 {
+  color: var(--crt);
+}
+
+.clue-list {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.clue-card {
+  border: 1px solid rgba(155, 245, 178, 0.2);
+  border-radius: 16px;
+  padding: 0.95rem;
+  background: rgba(0, 0, 0, 0.22);
+}
+
+.clue-card strong {
+  display: block;
+  margin-bottom: 0.35rem;
+  color: var(--crt);
+  letter-spacing: 0.08em;
+}
+
+.clue-card p,
+.diagnostics p {
+  margin: 0;
+  color: #c5f8cf;
+  line-height: 1.45;
+}
+
+@media (max-width: 840px) {
+  .game-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .brand-row,
+  .module-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
