@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Safe Cracker</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="game-shell" aria-labelledby="game-title">
+    <section class="safe-panel" aria-label="Safe">
+      <div class="brand-row">
+        <p class="eyebrow">Prototype v0.1</p>
+        <p class="status-pill" id="integrityStatus">Checking safe...</p>
+      </div>
+
+      <h1 id="game-title">Safe Cracker</h1>
+      <p class="tagline">Use clue-keys to eliminate impossible codes. No guessing. Well, less guessing.</p>
+
+      <div class="safe-face" aria-hidden="true">
+        <div class="outer-ring">
+          <div class="inner-ring">
+            <div class="dial-cap">LOCK</div>
+          </div>
+        </div>
+      </div>
+
+      <section class="code-entry" aria-label="Combination entry">
+        <h2>Combination</h2>
+        <div class="slots" id="codeSlots" aria-live="polite"></div>
+        <div class="controls-row">
+          <button id="clearButton" type="button">Clear</button>
+          <button id="openButton" type="button">Open Safe</button>
+        </div>
+        <p class="result" id="resultText" role="status">Awaiting code.</p>
+      </section>
+
+      <section class="dial-pad" aria-label="Dial numbers">
+        <h2>Dial 1–10</h2>
+        <div class="dial-buttons" id="dialButtons"></div>
+      </section>
+    </section>
+
+    <section class="computer-module" aria-label="Key Computer Module">
+      <div class="module-header">
+        <p class="eyebrow">Key Computer Module</p>
+        <p class="module-light" id="moduleLight">ONLINE</p>
+      </div>
+
+      <h2>Clue Keys</h2>
+      <div class="clue-list" id="clueList"></div>
+
+      <div class="diagnostics">
+        <h2>Diagnostics</h2>
+        <p id="diagnosticText">Scanning clue field...</p>
+      </div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
