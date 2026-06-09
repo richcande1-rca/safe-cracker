@@ -56,6 +56,7 @@ const diagnosticText = document.querySelector("#diagnosticText");
 const clearButton = document.querySelector("#clearButton");
 const openButton = document.querySelector("#openButton");
 const safeFace = document.querySelector(".safe-face");
+const dialNotice = document.querySelector("#dialNotice");
 
 function getDialNumbers() {
   const numbers = [];
@@ -122,6 +123,79 @@ function getFilledSlotNames() {
 
 function getNextSlotName() {
   return SLOT_LABELS[state.selectedCode.length] || null;
+}
+
+function injectDialNoticeStyles() {
+  if (document.querySelector("#dialNoticeStyles")) {
+    return;
+  }
+
+  const style = document.createElement("style");
+  style.id = "dialNoticeStyles";
+  style.textContent = `
+    .dial-cap {
+      width: 66%;
+      grid-template-rows: auto auto;
+      gap: 0.18rem;
+      padding: 0.45rem;
+      text-align: center;
+    }
+
+    .dial-notice-label {
+      color: var(--brass);
+      font-family: "Courier New", monospace;
+      font-size: 0.52rem;
+      letter-spacing: 0.12em;
+      line-height: 1;
+    }
+
+    .dial-notice {
+      color: var(--crt);
+      font-family: "Courier New", monospace;
+      font-size: clamp(1rem, 2.2vw, 1.75rem);
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      line-height: 0.95;
+      text-shadow: 0 0 16px rgba(155, 245, 178, 0.42);
+    }
+
+    .dial-cap.notice-hot {
+      border-color: rgba(155, 245, 178, 0.72);
+      box-shadow: 0 0 20px rgba(155, 245, 178, 0.16), inset 0 0 16px rgba(155, 245, 178, 0.08);
+    }
+
+    .dial-cap.notice-ready {
+      border-color: rgba(198, 155, 79, 0.76);
+      box-shadow: 0 0 20px rgba(198, 155, 79, 0.16), inset 0 0 16px rgba(198, 155, 79, 0.08);
+    }
+  `;
+
+  document.head.append(style);
+}
+
+function updateDialNotice() {
+  if (!dialNotice) {
+    return;
+  }
+
+  const dialCap = dialNotice.closest(".dial-cap");
+  const nextSlot = getNextSlotName();
+
+  dialCap?.classList.remove("notice-hot", "notice-ready");
+
+  if (state.lastSelectedNumber === null) {
+    dialNotice.textContent = "NEXT SLOT A";
+    return;
+  }
+
+  if (nextSlot) {
+    dialNotice.textContent = `SLOT ${state.lastFilledSlot} = ${state.lastSelectedNumber}`;
+    dialCap?.classList.add("notice-hot");
+    return;
+  }
+
+  dialNotice.textContent = `READY ${state.selectedCode.join("-")}`;
+  dialCap?.classList.add("notice-ready");
 }
 
 function pulseSafeFace(className = "is-pulsing") {
@@ -276,6 +350,7 @@ function renderDiagnostics() {
 function render() {
   renderSlots();
   renderDial();
+  updateDialNotice();
   renderClues();
   renderDiagnostics();
 }
@@ -347,6 +422,7 @@ function openSafe() {
 function boot() {
   state.validation = validatePuzzle(puzzle.clueKeys);
 
+  injectDialNoticeStyles();
   render();
 
   clearButton.addEventListener("click", clearCode);
