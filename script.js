@@ -41,6 +41,9 @@ const puzzle = {
 const state = {
   selectedCode: [],
   validation: null,
+  lastSelectedNumber: null,
+  lastFilledSlot: null,
+  lastCheck: null,
 };
 
 const codeSlots = document.querySelector("#codeSlots");
@@ -52,6 +55,7 @@ const moduleLight = document.querySelector("#moduleLight");
 const diagnosticText = document.querySelector("#diagnosticText");
 const clearButton = document.querySelector("#clearButton");
 const openButton = document.querySelector("#openButton");
+const safeFace = document.querySelector(".safe-face");
 
 function getDialNumbers() {
   const numbers = [];
@@ -112,6 +116,49 @@ function codesMatch(left, right) {
   return left.length === right.length && left.every((value, index) => value === right[index]);
 }
 
+function getFilledSlotNames() {
+  return SLOT_LABELS.slice(0, state.selectedCode.length);
+}
+
+function getNextSlotName() {
+  return SLOT_LABELS[state.selectedCode.length] || null;
+}
+
+function pulseSafeFace(className = "is-pulsing") {
+  safeFace.classList.remove("is-pulsing", "is-open", "is-denied");
+  void safeFace.offsetWidth;
+  safeFace.classList.add(className);
+
+  window.setTimeout(() => {
+    safeFace.classList.remove(className);
+  }, 520);
+}
+
+function getClueStatusClass(clue) {
+  if (state.lastCheck) {
+    return clue.test(state.lastCheck.code) ? "passed" : "failed";
+  }
+
+  const filledSlots = getFilledSlotNames();
+  const nextSlot = getNextSlotName();
+  const filledTargetCount = clue.targets.filter((target) => filledSlots.includes(target)).length;
+  const allTargetsFilled = filledTargetCount === clue.targets.length;
+
+  if (allTargetsFilled) {
+    return "ready";
+  }
+
+  if (filledTargetCount > 0) {
+    return "armed";
+  }
+
+  if (nextSlot && clue.targets.includes(nextSlot)) {
+    return "listening";
+  }
+
+  return "idle";
+}
+
 function renderSlots() {
   codeSlots.innerHTML = "";
 
@@ -121,8 +168,16 @@ function renderSlots() {
     const valueText = document.createElement("span");
     const value = state.selectedCode[index];
     const slotName = SLOT_LABELS[index];
+    const isCurrentTarget = index === state.selectedCode.length;
+    const isRecent = slotName === state.lastFilledSlot;
 
-    slot.className = `slot ${value ? "" : "empty"}`;
+    slot.className = [
+      "slot",
+      value ? "filled" : "empty",
+      isCurrentTarget ? "current-target" : "",
+      isRecent ? "recent-fill" : "",
+    ].filter(Boolean).join(" ");
+
     slot.dataset.slot = slotName;
     slot.setAttribute("aria-label", `Slot ${slotName}: ${value || "empty"}`);
 
@@ -144,6 +199,8 @@ function renderDial() {
     const button = document.createElement("button");
     button.type = "button";
     button.textContent = number;
+    button.dataset.number = String(number);
+    button.className = number === state.lastSelectedNumber ? "last-selected" : "";
     button.disabled =
       state.selectedCode.length >= CODE_LENGTH ||
       (!ALLOW_REPEATS && state.selectedCode.includes(number));
@@ -157,8 +214,9 @@ function renderClues() {
   clueList.innerHTML = "";
 
   puzzle.clueKeys.forEach((clue) => {
+    const statusClass = getClueStatusClass(clue);
     const clueCard = document.createElement("article");
-    clueCard.className = "clue-card";
+    clueCard.className = `clue-card ${statusClass}`;
 
     const name = document.createElement("strong");
     name.textContent = clue.name;
@@ -173,7 +231,8 @@ function renderClues() {
 
     clue.targets.forEach((target) => {
       const chip = document.createElement("span");
-      chip.className = "target-chip";
+      const isFilled = getFilledSlotNames().includes(target);
+      chip.className = `target-chip ${isFilled ? "filled-target" : ""}`;
       chip.textContent = target;
       targets.append(chip);
     });
@@ -217,6 +276,7 @@ function renderDiagnostics() {
 function render() {
   renderSlots();
   renderDial();
+  renderClues();
   renderDiagnostics();
 }
 
@@ -229,14 +289,24 @@ function selectNumber(number) {
     return;
   }
 
+  state.lastSelectedNumber = number;
+  state.lastFilledSlot = SLOT_LABELS[state.selectedCode.length];
+  state.lastCheck = null;
   state.selectedCode.push(number);
+
   resultText.className = "result";
-  resultText.textContent = "Code staged.";
+  resultText.textContent = `Dial clicked ${number} into Slot ${state.lastFilledSlot}.`;
+
   render();
+  pulseSafeFace();
 }
 
 function clearCode() {
   state.selectedCode = [];
+  state.lastSelectedNumber = null;
+  state.lastFilledSlot = null;
+  state.lastCheck = null;
+
   resultText.className = "result";
   resultText.textContent = "Awaiting code.";
   render();
@@ -246,32 +316,37 @@ function openSafe() {
   if (!state.validation?.isFair) {
     resultText.className = "result locked";
     resultText.textContent = "Module fault. This safe has no proven fair solution.";
+    pulseSafeFace("is-denied");
     return;
   }
 
   if (state.selectedCode.length !== CODE_LENGTH) {
     resultText.className = "result locked";
     resultText.textContent = "LOCKED — enter all three numbers first.";
+    pulseSafeFace("is-denied");
     return;
   }
 
   const solution = state.validation.possibleSolutions[0];
+  state.lastCheck = { code: [...state.selectedCode] };
+  render();
 
   if (codesMatch(state.selectedCode, solution)) {
     resultText.className = "result open";
     resultText.textContent = `SAFE OPEN — ${solution.join("-")}. The tumblers surrender.`;
+    pulseSafeFace("is-open");
     return;
   }
 
   const passed = countPassedClues(state.selectedCode);
   resultText.className = "result locked";
   resultText.textContent = `LOCKED — module agreement: ${passed}/${puzzle.clueKeys.length} keys.`;
+  pulseSafeFace("is-denied");
 }
 
 function boot() {
   state.validation = validatePuzzle(puzzle.clueKeys);
 
-  renderClues();
   render();
 
   clearButton.addEventListener("click", clearCode);
