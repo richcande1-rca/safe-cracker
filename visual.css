@@ -194,20 +194,20 @@ body {
   left: 50%;
   display: grid;
   place-items: center;
-  width: 1.45rem;
-  height: 1.45rem;
-  margin: -0.725rem;
-  border-radius: 50%;
+  width: 1.2rem;
+  height: 1.2rem;
+  margin: -0.6rem;
   color: #1b0f06;
   background: transparent;
   border: 0;
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 1.12rem;
-  font-weight: 900;
+  font-family: "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
   line-height: 1;
-  text-shadow: 0 1px 0 rgba(255, 232, 142, 0.42);
+  text-align: center;
+  text-shadow: 0 1px 0 rgba(255, 232, 142, 0.32);
   box-shadow: none;
-  transform: rotate(var(--dial-number-angle)) translateY(-6.35rem) rotate(calc(var(--dial-spin, 0deg) - var(--dial-number-angle)));
+  transform: rotate(var(--dial-number-angle)) translateY(-6.85rem) rotate(calc(var(--dial-spin, 0deg) - var(--dial-number-angle)));
 }
 
 .dial-hub {
@@ -305,8 +305,8 @@ body {
   }
 
   .dial-scale span {
-    font-size: 0.9rem;
-    transform: rotate(var(--dial-number-angle)) translateY(-4.9rem) rotate(calc(var(--dial-spin, 0deg) - var(--dial-number-angle)));
+    font-size: 0.82rem;
+    transform: rotate(var(--dial-number-angle)) translateY(-5.25rem) rotate(calc(var(--dial-spin, 0deg) - var(--dial-number-angle)));
   }
 
   .dial-hub {
