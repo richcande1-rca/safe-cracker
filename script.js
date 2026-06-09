@@ -4,41 +4,143 @@ const CODE_LENGTH = 3;
 const ALLOW_REPEATS = false;
 const SLOT_LABELS = ["A", "B", "C"];
 
-const puzzle = {
-  title: "Training Safe 001",
-  clueKeys: [
-    {
-      name: "SUM KEY",
-      targets: ["A", "C"],
-      formula: "A + C = 11",
-      text: "The left and right slots add to 11.",
-      test: ([slotA, , slotC]) => slotA + slotC === 11,
-    },
-    {
-      name: "SCALE KEY",
-      targets: ["A", "B"],
-      formula: "B = A × 2",
-      text: "The center slot is double the left slot.",
-      test: ([slotA, slotB]) => slotB === slotA * 2,
-    },
-    {
-      name: "OFFSET KEY",
-      targets: ["B", "C"],
-      formula: "C = B − 1",
-      text: "The right slot is one click lower than the center slot.",
-      test: ([, slotB, slotC]) => slotC === slotB - 1,
-    },
-    {
-      name: "PARITY KEY",
-      targets: ["A", "B", "C"],
-      formula: "odd(A, B, C) = 1",
-      text: "Exactly one slot contains an odd number.",
-      test: (code) => code.filter((number) => number % 2 !== 0).length === 1,
-    },
-  ],
-};
+const puzzleBank = [
+  {
+    title: "Training Safe 001",
+    clueKeys: [
+      {
+        name: "SUM KEY",
+        targets: ["A", "C"],
+        formula: "A + C = 11",
+        text: "The left and right slots add to 11.",
+        test: ([slotA, , slotC]) => slotA + slotC === 11,
+      },
+      {
+        name: "SCALE KEY",
+        targets: ["A", "B"],
+        formula: "B = A × 2",
+        text: "The center slot is double the left slot.",
+        test: ([slotA, slotB]) => slotB === slotA * 2,
+      },
+      {
+        name: "OFFSET KEY",
+        targets: ["B", "C"],
+        formula: "C = B − 1",
+        text: "The right slot is one click lower than the center slot.",
+        test: ([, slotB, slotC]) => slotC === slotB - 1,
+      },
+      {
+        name: "PARITY KEY",
+        targets: ["A", "B", "C"],
+        formula: "odd(A, B, C) = 1",
+        text: "Exactly one slot contains an odd number.",
+        test: (code) => code.filter((number) => number % 2 !== 0).length === 1,
+      },
+    ],
+  },
+  {
+    title: "Training Safe 002",
+    clueKeys: [
+      {
+        name: "SUM KEY",
+        targets: ["A", "C"],
+        formula: "A + C = 7",
+        text: "The left and right slots add to 7.",
+        test: ([slotA, , slotC]) => slotA + slotC === 7,
+      },
+      {
+        name: "GAP KEY",
+        targets: ["B", "C"],
+        formula: "B − C = 4",
+        text: "The center slot is four clicks higher than the right slot.",
+        test: ([, slotB, slotC]) => slotB - slotC === 4,
+      },
+      {
+        name: "PAIR KEY",
+        targets: ["A", "B"],
+        formula: "A + B = 11",
+        text: "The left and center slots add to 11.",
+        test: ([slotA, slotB]) => slotA + slotB === 11,
+      },
+      {
+        name: "ORDER KEY",
+        targets: ["A", "C"],
+        formula: "A < C",
+        text: "The left slot is lower than the right slot.",
+        test: ([slotA, , slotC]) => slotA < slotC,
+      },
+    ],
+  },
+  {
+    title: "Training Safe 003",
+    clueKeys: [
+      {
+        name: "SCALE KEY",
+        targets: ["A", "B"],
+        formula: "A = B × 2",
+        text: "The left slot is double the center slot.",
+        test: ([slotA, slotB]) => slotA === slotB * 2,
+      },
+      {
+        name: "TOTAL KEY",
+        targets: ["A", "B", "C"],
+        formula: "A + B + C = 19",
+        text: "All three slots add to 19.",
+        test: ([slotA, slotB, slotC]) => slotA + slotB + slotC === 19,
+      },
+      {
+        name: "GAP KEY",
+        targets: ["A", "C"],
+        formula: "C − A = 4",
+        text: "The right slot is four clicks higher than the left slot.",
+        test: ([slotA, , slotC]) => slotC - slotA === 4,
+      },
+      {
+        name: "PARITY KEY",
+        targets: ["B"],
+        formula: "B is odd",
+        text: "The center slot is odd.",
+        test: ([, slotB]) => slotB % 2 !== 0,
+      },
+    ],
+  },
+  {
+    title: "Training Safe 004",
+    clueKeys: [
+      {
+        name: "SUM KEY",
+        targets: ["A", "B"],
+        formula: "A + B = 13",
+        text: "The left and center slots add to 13.",
+        test: ([slotA, slotB]) => slotA + slotB === 13,
+      },
+      {
+        name: "SCALE KEY",
+        targets: ["B", "C"],
+        formula: "B = C × 2",
+        text: "The center slot is double the right slot.",
+        test: ([, slotB, slotC]) => slotB === slotC * 2,
+      },
+      {
+        name: "GAP KEY",
+        targets: ["A", "C"],
+        formula: "A − C = 7",
+        text: "The left slot is seven clicks higher than the right slot.",
+        test: ([slotA, , slotC]) => slotA - slotC === 7,
+      },
+      {
+        name: "PARITY KEY",
+        targets: ["A", "B", "C"],
+        formula: "even(A, B, C) = 2",
+        text: "Exactly two slots contain even numbers.",
+        test: (code) => code.filter((number) => number % 2 === 0).length === 2,
+      },
+    ],
+  },
+];
 
 const state = {
+  activePuzzleIndex: 0,
   selectedCode: [],
   validation: null,
   lastSelectedNumber: null,
@@ -54,10 +156,15 @@ const integrityStatus = document.querySelector("#integrityStatus");
 const moduleLight = document.querySelector("#moduleLight");
 const diagnosticText = document.querySelector("#diagnosticText");
 const clearButton = document.querySelector("#clearButton");
+const newSafeButton = document.querySelector("#newSafeButton");
 const openButton = document.querySelector("#openButton");
 const safeFace = document.querySelector(".safe-face");
 const safeDial = document.querySelector(".outer-ring");
 const dialNotice = document.querySelector("#dialNotice");
+
+function getActivePuzzle() {
+  return puzzleBank[state.activePuzzleIndex];
+}
 
 function getDialNumbers() {
   const numbers = [];
@@ -120,7 +227,7 @@ function validatePuzzle(clues) {
 }
 
 function countPassedClues(code) {
-  return puzzle.clueKeys.filter((clue) => clue.test(code)).length;
+  return getActivePuzzle().clueKeys.filter((clue) => clue.test(code)).length;
 }
 
 function codesMatch(left, right) {
@@ -332,7 +439,7 @@ function renderDial() {
 function renderClues() {
   clueList.innerHTML = "";
 
-  puzzle.clueKeys.forEach((clue) => {
+  getActivePuzzle().clueKeys.forEach((clue) => {
     const statusClass = getClueStatusClass(clue);
     const clueCard = document.createElement("article");
     clueCard.className = `clue-card ${statusClass}`;
@@ -370,6 +477,7 @@ function renderClues() {
 
 function renderDiagnostics() {
   const { validation } = state;
+  const puzzle = getActivePuzzle();
 
   if (!validation) {
     integrityStatus.textContent = "Checking safe...";
@@ -382,13 +490,13 @@ function renderDiagnostics() {
     moduleLight.textContent = "ONLINE";
     integrityStatus.classList.remove("bad");
     moduleLight.classList.remove("bad");
-    diagnosticText.textContent = `${validation.totalCodes} possible codes scanned. Clue field resolves to one fair solution.`;
+    diagnosticText.textContent = `${puzzle.title}: ${validation.totalCodes} possible codes scanned. Clue field resolves to one fair solution.`;
   } else {
     integrityStatus.textContent = "Unstable";
     moduleLight.textContent = "FAULT";
     integrityStatus.classList.add("bad");
     moduleLight.classList.add("bad");
-    diagnosticText.textContent = `${validation.totalCodes} possible codes scanned. Clue field resolves to ${validation.possibleSolutions.length} solutions. Safe rejected.`;
+    diagnosticText.textContent = `${puzzle.title}: ${validation.totalCodes} possible codes scanned. Clue field resolves to ${validation.possibleSolutions.length} solutions. Safe rejected.`;
   }
 }
 
@@ -399,6 +507,27 @@ function render() {
   updateDialNotice();
   renderClues();
   renderDiagnostics();
+}
+
+function resetEntry() {
+  state.selectedCode = [];
+  state.lastSelectedNumber = null;
+  state.lastFilledSlot = null;
+  state.lastCheck = null;
+}
+
+function loadSafe(puzzleIndex, announce = false) {
+  state.activePuzzleIndex = puzzleIndex;
+  resetEntry();
+  state.validation = validatePuzzle(getActivePuzzle().clueKeys);
+
+  if (announce) {
+    resultText.className = "result";
+    resultText.textContent = `${getActivePuzzle().title} loaded. Awaiting code.`;
+  }
+
+  render();
+  pulseSafeFace();
 }
 
 function selectNumber(number) {
@@ -423,14 +552,16 @@ function selectNumber(number) {
 }
 
 function clearCode() {
-  state.selectedCode = [];
-  state.lastSelectedNumber = null;
-  state.lastFilledSlot = null;
-  state.lastCheck = null;
+  resetEntry();
 
   resultText.className = "result";
   resultText.textContent = "Awaiting code.";
   render();
+}
+
+function loadNextSafe() {
+  const nextPuzzleIndex = (state.activePuzzleIndex + 1) % puzzleBank.length;
+  loadSafe(nextPuzzleIndex, true);
 }
 
 function openSafe() {
@@ -461,11 +592,7 @@ function openSafe() {
     return;
   }
 
-  state.selectedCode = [];
-  state.lastSelectedNumber = null;
-  state.lastFilledSlot = null;
-  state.lastCheck = null;
-
+  resetEntry();
   render();
 
   resultText.className = "result locked";
@@ -474,12 +601,11 @@ function openSafe() {
 }
 
 function boot() {
-  state.validation = validatePuzzle(puzzle.clueKeys);
-
   injectDialNoticeStyles();
-  render();
+  loadSafe(0);
 
   clearButton.addEventListener("click", clearCode);
+  newSafeButton.addEventListener("click", loadNextSafe);
   openButton.addEventListener("click", openSafe);
 }
 
