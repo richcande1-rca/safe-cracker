@@ -113,12 +113,12 @@ body {
   place-items: center;
   overflow: hidden;
   background:
-    radial-gradient(circle at 44% 32%, rgba(255, 255, 235, 0.82), transparent 0 21%, rgba(255, 255, 255, 0.18) 22%, transparent 36%),
-    radial-gradient(circle at 50% 50%, #fff2ac 0 10%, #e5aa2d 33%, #fff1a0 52%, #c9851d 78%, #5b3515 100%) !important;
+    radial-gradient(circle at 46% 34%, rgba(255, 255, 235, 0.62), transparent 0 15%, rgba(255, 255, 255, 0.14) 21%, transparent 32%),
+    radial-gradient(circle at 50% 50%, #fff0a2 0 9%, #d99b22 28%, #ffe782 50%, #d18c1f 76%, #633914 100%) !important;
   border: 4px solid #1b1008;
   box-shadow:
-    inset 0 0 0 3px rgba(255, 220, 112, 0.44),
-    inset 0 0 38px rgba(0, 0, 0, 0.32),
+    inset 0 0 0 3px rgba(255, 220, 112, 0.38),
+    inset 0 0 34px rgba(0, 0, 0, 0.26),
     0 10px 0 rgba(64, 43, 22, 0.95),
     0 24px 38px rgba(0, 0, 0, 0.46);
 }
@@ -130,8 +130,8 @@ body {
   z-index: 0 !important;
   border-radius: 50% !important;
   background:
-    radial-gradient(circle at 41% 30%, rgba(255, 255, 241, 0.72), transparent 0 21%, rgba(255, 255, 255, 0.22) 28%, transparent 38%),
-    radial-gradient(circle, transparent 0 44%, rgba(82, 39, 8, 0.72) 45% 47%, transparent 48% 59%, rgba(62, 32, 10, 0.78) 60% 62%, transparent 63% 100%) !important;
+    radial-gradient(circle at 41% 30%, rgba(255, 255, 241, 0.5), transparent 0 18%, rgba(255, 255, 255, 0.18) 25%, transparent 35%),
+    radial-gradient(circle, transparent 0 30%, rgba(86, 44, 11, 0.7) 31% 33%, transparent 34% 56%, rgba(62, 32, 10, 0.76) 57% 59%, transparent 60% 100%) !important;
   transform: none !important;
   transition: none !important;
 }
@@ -170,21 +170,21 @@ body {
   background:
     repeating-conic-gradient(
       from -0.45deg,
-      #201209 0 1.1deg,
-      transparent 1.1deg 4.5deg
+      #170d06 0 1.35deg,
+      transparent 1.35deg 4.5deg
     ),
     repeating-conic-gradient(
-      from -0.9deg,
-      #201209 0 2.3deg,
-      transparent 2.3deg 36deg
+      from -1.2deg,
+      #170d06 0 3.2deg,
+      transparent 3.2deg 36deg
     );
-  mask: radial-gradient(circle, transparent 0 75%, #000 76% 93%, transparent 94%);
+  mask: radial-gradient(circle, transparent 0 67%, #000 68% 96%, transparent 97%);
 }
 
 .dial-scale::after {
-  inset: 16%;
+  inset: 25%;
   border: 3px solid rgba(47, 24, 10, 0.72);
-  box-shadow: 0 0 0 1px rgba(255, 244, 188, 0.38), inset 0 0 15px rgba(0, 0, 0, 0.18);
+  box-shadow: 0 0 0 1px rgba(255, 244, 188, 0.34), inset 0 0 15px rgba(0, 0, 0, 0.14);
 }
 
 .dial-scale span {
@@ -198,33 +198,33 @@ body {
   height: 1.45rem;
   margin: -0.725rem;
   border-radius: 50%;
-  color: #1d1007;
+  color: #1b0f06;
   background: transparent;
   border: 0;
   font-family: Georgia, "Times New Roman", serif;
-  font-size: 1.03rem;
+  font-size: 1.12rem;
   font-weight: 900;
   line-height: 1;
   text-shadow: 0 1px 0 rgba(255, 232, 142, 0.42);
   box-shadow: none;
-  transform: rotate(var(--dial-number-angle)) translateY(-5.15rem) rotate(calc(var(--dial-spin, 0deg) - var(--dial-number-angle)));
+  transform: rotate(var(--dial-number-angle)) translateY(-6.35rem) rotate(calc(var(--dial-spin, 0deg) - var(--dial-number-angle)));
 }
 
 .dial-hub {
   position: relative;
   z-index: 5;
-  width: 38%;
+  width: 25%;
   aspect-ratio: 1;
   border-radius: 50%;
   background:
-    radial-gradient(circle at 38% 30%, rgba(255, 255, 229, 0.95), transparent 0 24%, rgba(255, 238, 128, 0.5) 34%, transparent 45%),
-    radial-gradient(circle, #ffe97c 0 28%, #d8921f 52%, #6c370c 72%, #1b0f06 100%);
-  border: 5px solid #231207;
+    radial-gradient(circle at 38% 30%, rgba(255, 255, 229, 0.82), transparent 0 20%, rgba(255, 238, 128, 0.38) 30%, transparent 42%),
+    radial-gradient(circle, #ffe375 0 24%, #d49220 50%, #6c370c 72%, #1b0f06 100%);
+  border: 4px solid #231207;
   box-shadow:
-    0 0 0 7px rgba(255, 222, 100, 0.48),
-    0 0 0 11px rgba(55, 27, 8, 0.86),
-    inset 0 0 18px rgba(255, 249, 190, 0.52),
-    0 10px 16px rgba(0, 0, 0, 0.34);
+    0 0 0 5px rgba(255, 222, 100, 0.42),
+    0 0 0 9px rgba(55, 27, 8, 0.82),
+    inset 0 0 13px rgba(255, 249, 190, 0.42),
+    0 8px 13px rgba(0, 0, 0, 0.32);
 }
 
 .dial-plaque {
@@ -305,8 +305,12 @@ body {
   }
 
   .dial-scale span {
-    font-size: 0.82rem;
-    transform: rotate(var(--dial-number-angle)) translateY(-3.9rem) rotate(calc(var(--dial-spin, 0deg) - var(--dial-number-angle)));
+    font-size: 0.9rem;
+    transform: rotate(var(--dial-number-angle)) translateY(-4.9rem) rotate(calc(var(--dial-spin, 0deg) - var(--dial-number-angle)));
+  }
+
+  .dial-hub {
+    width: 26%;
   }
 
   .dial-plaque {
