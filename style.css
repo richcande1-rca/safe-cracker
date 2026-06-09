@@ -19,7 +19,7 @@
 
 body {
   margin: 0;
-  min-height: 100vh;
+  min-height: 100svh;
   background:
     radial-gradient(circle at top left, rgba(198, 155, 79, 0.18), transparent 28rem),
     radial-gradient(circle at bottom right, rgba(155, 245, 178, 0.08), transparent 24rem),
@@ -33,21 +33,23 @@ button {
 }
 
 .game-shell {
-  width: min(1120px, calc(100% - 2rem));
+  width: min(1060px, calc(100% - 1rem));
+  min-height: 100svh;
   margin: 0 auto;
-  padding: 2rem 0;
+  padding: clamp(0.55rem, 1.5vh, 1rem) 0;
   display: grid;
-  grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.75fr);
-  gap: 1.25rem;
+  grid-template-columns: minmax(0, 1fr) minmax(290px, 0.72fr);
+  align-items: start;
+  gap: clamp(0.7rem, 1.4vw, 1rem);
 }
 
 .safe-panel,
 .computer-module {
   border: 1px solid rgba(198, 155, 79, 0.38);
-  border-radius: 24px;
+  border-radius: 18px;
   background: linear-gradient(145deg, rgba(44, 31, 21, 0.98), rgba(24, 17, 12, 0.98));
-  box-shadow: 0 28px 70px var(--shadow), inset 0 0 0 1px rgba(255, 255, 255, 0.04);
-  padding: 1.5rem;
+  box-shadow: 0 18px 44px var(--shadow), inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+  padding: clamp(0.8rem, 1.6vw, 1.15rem);
 }
 
 .brand-row,
@@ -56,16 +58,16 @@ button {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1rem;
+  gap: 0.75rem;
 }
 
 .eyebrow,
 .status-pill,
 .module-light {
   margin: 0;
-  letter-spacing: 0.11em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  font-size: 0.74rem;
+  font-size: 0.68rem;
 }
 
 .eyebrow {
@@ -78,7 +80,7 @@ button {
   border-radius: 999px;
   color: var(--crt);
   background: rgba(155, 245, 178, 0.08);
-  padding: 0.45rem 0.7rem;
+  padding: 0.32rem 0.55rem;
 }
 
 .status-pill.bad,
@@ -89,43 +91,43 @@ button {
 }
 
 h1 {
-  margin: 1rem 0 0.2rem;
-  font-size: clamp(2.6rem, 8vw, 5.8rem);
+  margin: 0.65rem 0 0.15rem;
+  font-size: clamp(2.15rem, 5.8vw, 4.35rem);
   line-height: 0.9;
   color: var(--brass);
   text-shadow: 0 8px 28px rgba(0, 0, 0, 0.6);
 }
 
 h2 {
-  margin: 0 0 0.8rem;
+  margin: 0 0 0.55rem;
   color: var(--brass);
-  font-size: 1rem;
+  font-size: 0.88rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
 .tagline {
   max-width: 42rem;
-  margin: 0 0 1.5rem;
+  margin: 0 0 0.85rem;
   color: var(--muted);
-  font-size: 1.08rem;
+  font-size: 0.98rem;
 }
 
 .safe-face {
   display: grid;
   place-items: center;
-  padding: 1.1rem 0 1.35rem;
+  padding: 0.45rem 0 0.65rem;
 }
 
 .outer-ring {
-  width: min(58vw, 320px);
+  width: clamp(145px, min(25vw, 28vh), 235px);
   aspect-ratio: 1;
   border-radius: 50%;
   background:
     repeating-conic-gradient(from -8deg, #d7ae61 0 4deg, #7e5c2f 4deg 8deg),
     radial-gradient(circle, #d5a757, #60451f 68%, #24170e 69%);
-  padding: 1rem;
-  box-shadow: inset 0 0 34px rgba(0, 0, 0, 0.7), 0 22px 44px rgba(0, 0, 0, 0.45);
+  padding: clamp(0.55rem, 1.4vw, 0.8rem);
+  box-shadow: inset 0 0 28px rgba(0, 0, 0, 0.7), 0 16px 30px rgba(0, 0, 0, 0.42);
 }
 
 .inner-ring {
@@ -135,7 +137,7 @@ h2 {
   background: radial-gradient(circle, #2c2118 0 38%, #110c09 39% 100%);
   display: grid;
   place-items: center;
-  border: 9px solid rgba(24, 16, 9, 0.82);
+  border: clamp(5px, 1vw, 8px) solid rgba(24, 16, 9, 0.82);
 }
 
 .dial-cap {
@@ -147,7 +149,8 @@ h2 {
   color: var(--brass);
   background: radial-gradient(circle, #4b3521, #17100a 72%);
   border: 2px solid rgba(198, 155, 79, 0.45);
-  letter-spacing: 0.16em;
+  letter-spacing: 0.13em;
+  font-size: 0.86rem;
   font-weight: bold;
 }
 
@@ -155,25 +158,25 @@ h2 {
 .dial-pad,
 .diagnostics {
   border-top: 1px solid rgba(198, 155, 79, 0.22);
-  padding-top: 1.1rem;
-  margin-top: 1.1rem;
+  padding-top: 0.75rem;
+  margin-top: 0.75rem;
 }
 
 .slots {
   display: grid;
-  grid-template-columns: repeat(3, minmax(70px, 1fr));
-  gap: 0.75rem;
-  margin-bottom: 1rem;
+  grid-template-columns: repeat(3, minmax(56px, 1fr));
+  gap: 0.55rem;
+  margin-bottom: 0.75rem;
 }
 
 .slot {
-  min-height: 78px;
-  border-radius: 16px;
+  min-height: 58px;
+  border-radius: 12px;
   border: 1px solid rgba(198, 155, 79, 0.42);
   background: rgba(0, 0, 0, 0.22);
   display: grid;
   place-items: center;
-  font-size: 2.3rem;
+  font-size: 1.8rem;
   color: var(--crt);
   box-shadow: inset 0 0 18px rgba(155, 245, 178, 0.08);
 }
@@ -185,16 +188,17 @@ h2 {
 .controls-row button,
 .dial-buttons button {
   border: 1px solid rgba(198, 155, 79, 0.48);
-  border-radius: 12px;
+  border-radius: 10px;
   background: linear-gradient(180deg, #3e2d1d, #20150d);
   color: var(--text);
   cursor: pointer;
-  box-shadow: 0 8px 14px rgba(0, 0, 0, 0.22);
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.22);
 }
 
 .controls-row button {
   flex: 1;
-  padding: 0.8rem 1rem;
+  min-height: 42px;
+  padding: 0.55rem 0.75rem;
 }
 
 #openButton {
@@ -206,12 +210,12 @@ h2 {
 .dial-buttons {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: 0.65rem;
+  gap: 0.45rem;
 }
 
 .dial-buttons button {
-  min-height: 58px;
-  font-size: 1.2rem;
+  min-height: 44px;
+  font-size: 1rem;
 }
 
 .dial-buttons button:hover:not(:disabled),
@@ -226,9 +230,10 @@ h2 {
 }
 
 .result {
-  min-height: 1.5rem;
+  min-height: 1.25rem;
   margin: 0;
   color: var(--muted);
+  font-size: 0.95rem;
 }
 
 .result.open {
@@ -241,6 +246,7 @@ h2 {
 
 .computer-module {
   font-family: "Courier New", monospace;
+  font-size: 0.92rem;
   background:
     linear-gradient(rgba(155, 245, 178, 0.04) 50%, transparent 50%) 0 0 / 100% 4px,
     linear-gradient(145deg, rgba(15, 31, 19, 0.98), rgba(7, 13, 9, 0.98));
@@ -253,19 +259,19 @@ h2 {
 
 .clue-list {
   display: grid;
-  gap: 0.75rem;
+  gap: 0.55rem;
 }
 
 .clue-card {
   border: 1px solid rgba(155, 245, 178, 0.2);
-  border-radius: 16px;
-  padding: 0.95rem;
+  border-radius: 12px;
+  padding: 0.68rem;
   background: rgba(0, 0, 0, 0.22);
 }
 
 .clue-card strong {
   display: block;
-  margin-bottom: 0.35rem;
+  margin-bottom: 0.25rem;
   color: var(--crt);
   letter-spacing: 0.08em;
 }
@@ -274,12 +280,66 @@ h2 {
 .diagnostics p {
   margin: 0;
   color: #c5f8cf;
-  line-height: 1.45;
+  line-height: 1.35;
+}
+
+@media (max-height: 760px) and (min-width: 841px) {
+  .game-shell {
+    width: min(1000px, calc(100% - 0.75rem));
+    padding: 0.4rem 0;
+    gap: 0.65rem;
+  }
+
+  .safe-panel,
+  .computer-module {
+    padding: 0.7rem;
+    border-radius: 14px;
+  }
+
+  h1 {
+    font-size: clamp(1.95rem, 4.8vw, 3.6rem);
+    margin-top: 0.45rem;
+  }
+
+  .tagline {
+    margin-bottom: 0.45rem;
+    font-size: 0.9rem;
+  }
+
+  .outer-ring {
+    width: clamp(125px, min(19vw, 22vh), 185px);
+  }
+
+  .safe-face {
+    padding: 0.25rem 0 0.4rem;
+  }
+
+  .code-entry,
+  .dial-pad,
+  .diagnostics {
+    padding-top: 0.55rem;
+    margin-top: 0.55rem;
+  }
+
+  .slot {
+    min-height: 48px;
+    font-size: 1.55rem;
+  }
+
+  .controls-row button,
+  .dial-buttons button {
+    min-height: 38px;
+  }
+
+  .clue-card {
+    padding: 0.52rem;
+  }
 }
 
 @media (max-width: 840px) {
   .game-shell {
     grid-template-columns: 1fr;
+    width: min(620px, calc(100% - 0.75rem));
   }
 
   .brand-row,
