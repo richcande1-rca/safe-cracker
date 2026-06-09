@@ -9,24 +9,28 @@ const puzzle = {
   clueKeys: [
     {
       name: "SUM KEY",
+      targets: ["A", "C"],
       formula: "A + C = 11",
       text: "The left and right slots add to 11.",
       test: ([slotA, , slotC]) => slotA + slotC === 11,
     },
     {
       name: "SCALE KEY",
+      targets: ["A", "B"],
       formula: "B = A × 2",
       text: "The center slot is double the left slot.",
       test: ([slotA, slotB]) => slotB === slotA * 2,
     },
     {
       name: "OFFSET KEY",
+      targets: ["B", "C"],
       formula: "C = B − 1",
       text: "The right slot is one click lower than the center slot.",
       test: ([, slotB, slotC]) => slotC === slotB - 1,
     },
     {
       name: "PARITY KEY",
+      targets: ["A", "B", "C"],
       formula: "odd(A, B, C) = 1",
       text: "Exactly one slot contains an odd number.",
       test: (code) => code.filter((number) => number % 2 !== 0).length === 1,
@@ -119,10 +123,11 @@ function renderSlots() {
     const slotName = SLOT_LABELS[index];
 
     slot.className = `slot ${value ? "" : "empty"}`;
+    slot.dataset.slot = slotName;
     slot.setAttribute("aria-label", `Slot ${slotName}: ${value || "empty"}`);
 
     label.className = "slot-label";
-    label.textContent = slotName;
+    label.textContent = `Slot ${slotName}`;
 
     valueText.className = "slot-value";
     valueText.textContent = value || "_";
@@ -158,6 +163,21 @@ function renderClues() {
     const name = document.createElement("strong");
     name.textContent = clue.name;
 
+    const targets = document.createElement("div");
+    targets.className = "clue-targets";
+
+    const targetLabel = document.createElement("span");
+    targetLabel.className = "target-label";
+    targetLabel.textContent = "USES";
+    targets.append(targetLabel);
+
+    clue.targets.forEach((target) => {
+      const chip = document.createElement("span");
+      chip.className = "target-chip";
+      chip.textContent = target;
+      targets.append(chip);
+    });
+
     const formula = document.createElement("p");
     formula.className = "clue-formula";
     formula.textContent = clue.formula;
@@ -165,7 +185,7 @@ function renderClues() {
     const text = document.createElement("p");
     text.textContent = clue.text;
 
-    clueCard.append(name, formula, text);
+    clueCard.append(name, targets, formula, text);
     clueList.append(clueCard);
   });
 }
