@@ -2,11 +2,12 @@
 
 A small deduction puzzle game about cracking safes with clue-keys instead of guessing.
 
-The player sees a safe, a 1–10 dial, three code slots, and a Key Computer Module. Each key is a clue. Under the hood, each clue is a Boolean test that filters possible codes.
+The player sees a safe, a 1–10 dial, three labeled code slots, and a Key Computer Module. Each key is a clue that connects directly to one or more code slots. Under the hood, each clue is a Boolean test that filters possible codes.
 
 ## v0.1 foundation
 
 - 3-number safe code
+- slots labeled A, B, and C
 - 1–10 dial
 - no repeated numbers
 - clue keys shown in a computer module
@@ -20,17 +21,20 @@ Safe Cracker is not a guessing game. It is a deduction game wearing a brass jack
 Every clue must be:
 
 1. readable by the player
-2. testable by the engine
-3. usable by the validator to prove the puzzle has one fair solution
+2. visibly connected to the safe mechanism
+3. testable by the engine
+4. usable by the validator to prove the puzzle has one fair solution
+
+Flavor names are allowed later, but v0.1 uses functional key names so the player can immediately understand what each key does.
 
 ## First puzzle
 
-The first prototype safe uses four clue keys:
+The first prototype safe uses four connected clue keys:
 
-- The first and third numbers add to 11.
-- The middle number is double the first.
-- The third number is one click lower than the middle.
-- Exactly one number is odd.
+- SUM KEY: `A + C = 11`
+- SCALE KEY: `B = A × 2`
+- OFFSET KEY: `C = B − 1`
+- PARITY KEY: exactly one of A, B, and C is odd
 
 The game engine validates the clue set before the player starts.
 
