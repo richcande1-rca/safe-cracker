@@ -56,6 +56,7 @@ const diagnosticText = document.querySelector("#diagnosticText");
 const clearButton = document.querySelector("#clearButton");
 const openButton = document.querySelector("#openButton");
 const safeFace = document.querySelector(".safe-face");
+const safeDial = document.querySelector(".outer-ring");
 const dialNotice = document.querySelector("#dialNotice");
 
 function getDialNumbers() {
@@ -66,6 +67,15 @@ function getDialNumbers() {
   }
 
   return numbers;
+}
+
+function getDialAngle(number) {
+  if (number === null) {
+    return 0;
+  }
+
+  const dialCount = DIAL_MAX - DIAL_MIN + 1;
+  return (number - DIAL_MIN) * (360 / dialCount);
 }
 
 function hasRepeats(code) {
@@ -133,7 +143,33 @@ function injectDialNoticeStyles() {
   const style = document.createElement("style");
   style.id = "dialNoticeStyles";
   style.textContent = `
+    .outer-ring {
+      --dial-spin: 0deg;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .outer-ring::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      border-radius: 50%;
+      background:
+        repeating-conic-gradient(from -8deg, rgba(255, 225, 157, 0.88) 0 4deg, rgba(91, 63, 28, 0.88) 4deg 8deg),
+        radial-gradient(circle, rgba(213, 167, 87, 0.75), rgba(96, 69, 31, 0.55) 68%, transparent 69%);
+      transform: rotate(var(--dial-spin));
+      transition: transform 420ms cubic-bezier(.2,.9,.18,1.05);
+    }
+
+    .inner-ring {
+      position: relative;
+      z-index: 1;
+    }
+
     .dial-cap {
+      position: relative;
+      z-index: 2;
       width: 66%;
       grid-template-rows: auto auto;
       gap: 0.18rem;
@@ -196,6 +232,15 @@ function updateDialNotice() {
 
   dialNotice.textContent = `READY ${state.selectedCode.join("-")}`;
   dialCap?.classList.add("notice-ready");
+}
+
+function updateDialSpin() {
+  if (!safeDial) {
+    return;
+  }
+
+  const angle = getDialAngle(state.lastSelectedNumber);
+  safeDial.style.setProperty("--dial-spin", `${angle}deg`);
 }
 
 function pulseSafeFace(className = "is-pulsing") {
@@ -350,6 +395,7 @@ function renderDiagnostics() {
 function render() {
   renderSlots();
   renderDial();
+  updateDialSpin();
   updateDialNotice();
   renderClues();
   renderDiagnostics();
