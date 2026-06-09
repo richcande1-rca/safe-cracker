@@ -449,19 +449,27 @@ function openSafe() {
   }
 
   const solution = state.validation.possibleSolutions[0];
-  state.lastCheck = { code: [...state.selectedCode] };
-  render();
+  const attemptedCode = [...state.selectedCode];
 
-  if (codesMatch(state.selectedCode, solution)) {
+  if (codesMatch(attemptedCode, solution)) {
+    state.lastCheck = { code: attemptedCode };
+    render();
+
     resultText.className = "result open";
     resultText.textContent = `SAFE OPEN — ${solution.join("-")}. The tumblers surrender.`;
     pulseSafeFace("is-open");
     return;
   }
 
-  const passed = countPassedClues(state.selectedCode);
+  state.selectedCode = [];
+  state.lastSelectedNumber = null;
+  state.lastFilledSlot = null;
+  state.lastCheck = null;
+
+  render();
+
   resultText.className = "result locked";
-  resultText.textContent = `LOCKED — module agreement: ${passed}/${puzzle.clueKeys.length} keys.`;
+  resultText.textContent = "LOCKED — sequence rejected. Combination cleared.";
   pulseSafeFace("is-denied");
 }
 
