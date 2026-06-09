@@ -291,6 +291,32 @@ h2 {
   letter-spacing: 0.08em;
 }
 
+.clue-targets {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.28rem;
+  margin: 0 0 0.35rem;
+}
+
+.target-label {
+  color: var(--muted);
+  font-size: 0.66rem;
+  letter-spacing: 0.14em;
+}
+
+.target-chip {
+  min-width: 1.45rem;
+  border: 1px solid rgba(198, 155, 79, 0.38);
+  border-radius: 999px;
+  color: var(--brass);
+  background: rgba(198, 155, 79, 0.1);
+  padding: 0.08rem 0.34rem;
+  text-align: center;
+  font-size: 0.74rem;
+  font-weight: bold;
+}
+
 .clue-formula {
   display: inline-block;
   margin: 0 0 0.3rem;
