@@ -1,52 +1,44 @@
 (() => {
-  const AUTO_ADVANCE_AFTER_OPEN_MS = 1400;
+  const ADVANCE_DELAY_MS = 1400;
+  const CHECK_DELAY_MS = 80;
 
   const resultText = document.querySelector("#resultText");
   const newSafeButton = document.querySelector("#newSafeButton");
   const clearButton = document.querySelector("#clearButton");
   const openButton = document.querySelector("#openButton");
 
-  let autoAdvanceTimer = null;
+  let advanceTimer = null;
 
-  function cancelAutoAdvance() {
-    if (autoAdvanceTimer === null) {
+  function cancelAdvance() {
+    if (advanceTimer === null) {
       return;
     }
 
-    window.clearTimeout(autoAdvanceTimer);
-    autoAdvanceTimer = null;
+    window.clearTimeout(advanceTimer);
+    advanceTimer = null;
   }
 
-  function scheduleAutoAdvance() {
-    if (!resultText?.classList.contains("open")) {
+  function resultIsOpen() {
+    return Boolean(resultText?.classList.contains("open"));
+  }
+
+  function scheduleAdvance() {
+    cancelAdvance();
+
+    if (!resultIsOpen()) {
       return;
     }
 
-    if (!resultText.textContent.startsWith("SAFE OPEN")) {
-      return;
-    }
-
-    cancelAutoAdvance();
-
-    autoAdvanceTimer = window.setTimeout(() => {
-      autoAdvanceTimer = null;
+    advanceTimer = window.setTimeout(() => {
+      advanceTimer = null;
       newSafeButton?.click();
-    }, AUTO_ADVANCE_AFTER_OPEN_MS);
+    }, ADVANCE_DELAY_MS);
   }
 
-  if (resultText && newSafeButton) {
-    const resultObserver = new MutationObserver(scheduleAutoAdvance);
+  openButton?.addEventListener("click", () => {
+    window.setTimeout(scheduleAdvance, CHECK_DELAY_MS);
+  });
 
-    resultObserver.observe(resultText, {
-      attributes: true,
-      attributeFilter: ["class"],
-      childList: true,
-      characterData: true,
-      subtree: true,
-    });
-  }
-
-  clearButton?.addEventListener("click", cancelAutoAdvance);
-  newSafeButton?.addEventListener("click", cancelAutoAdvance);
-  openButton?.addEventListener("click", cancelAutoAdvance);
+  clearButton?.addEventListener("click", cancelAdvance);
+  newSafeButton?.addEventListener("click", cancelAdvance);
 })();
