@@ -2,28 +2,33 @@ const DIAL_MIN = 1;
 const DIAL_MAX = 10;
 const CODE_LENGTH = 3;
 const ALLOW_REPEATS = false;
+const SLOT_LABELS = ["A", "B", "C"];
 
 const puzzle = {
   title: "Training Safe 001",
   clueKeys: [
     {
-      name: "BRASS KEY",
-      text: "The first and third numbers add to 11.",
-      test: ([first, , third]) => first + third === 11,
+      name: "SUM KEY",
+      formula: "A + C = 11",
+      text: "The left and right slots add to 11.",
+      test: ([slotA, , slotC]) => slotA + slotC === 11,
     },
     {
-      name: "IRON KEY",
-      text: "The middle number is double the first.",
-      test: ([first, middle]) => middle === first * 2,
+      name: "SCALE KEY",
+      formula: "B = A × 2",
+      text: "The center slot is double the left slot.",
+      test: ([slotA, slotB]) => slotB === slotA * 2,
     },
     {
-      name: "GLASS KEY",
-      text: "The third number is one click lower than the middle.",
-      test: ([, middle, third]) => third === middle - 1,
+      name: "OFFSET KEY",
+      formula: "C = B − 1",
+      text: "The right slot is one click lower than the center slot.",
+      test: ([, slotB, slotC]) => slotC === slotB - 1,
     },
     {
-      name: "COPPER KEY",
-      text: "Exactly one number is odd.",
+      name: "PARITY KEY",
+      formula: "odd(A, B, C) = 1",
+      text: "Exactly one slot contains an odd number.",
       test: (code) => code.filter((number) => number % 2 !== 0).length === 1,
     },
   ],
@@ -108,12 +113,21 @@ function renderSlots() {
 
   for (let index = 0; index < CODE_LENGTH; index += 1) {
     const slot = document.createElement("div");
+    const label = document.createElement("span");
+    const valueText = document.createElement("span");
     const value = state.selectedCode[index];
+    const slotName = SLOT_LABELS[index];
 
     slot.className = `slot ${value ? "" : "empty"}`;
-    slot.textContent = value || "_";
-    slot.setAttribute("aria-label", `Code slot ${index + 1}: ${value || "empty"}`);
+    slot.setAttribute("aria-label", `Slot ${slotName}: ${value || "empty"}`);
 
+    label.className = "slot-label";
+    label.textContent = slotName;
+
+    valueText.className = "slot-value";
+    valueText.textContent = value || "_";
+
+    slot.append(label, valueText);
     codeSlots.append(slot);
   }
 }
@@ -144,10 +158,14 @@ function renderClues() {
     const name = document.createElement("strong");
     name.textContent = clue.name;
 
+    const formula = document.createElement("p");
+    formula.className = "clue-formula";
+    formula.textContent = clue.formula;
+
     const text = document.createElement("p");
     text.textContent = clue.text;
 
-    clueCard.append(name, text);
+    clueCard.append(name, formula, text);
     clueList.append(clueCard);
   });
 }
