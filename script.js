@@ -69,6 +69,13 @@ const puzzleBank = [
         text: "The left slot is lower than the right slot.",
         test: ([slotA, , slotC]) => slotA < slotC,
       },
+      {
+        name: "EVEN KEY",
+        targets: ["A"],
+        formula: "A is even",
+        text: "The left slot contains an even number.",
+        test: ([slotA]) => slotA % 2 === 0,
+      },
     ],
   },
   {
