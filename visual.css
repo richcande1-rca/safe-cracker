@@ -1,0 +1,160 @@
+/* Visual polish layer: keeps game logic and base layout untouched. */
+
+body {
+  background:
+    radial-gradient(circle at 18% 8%, rgba(255, 206, 120, 0.16), transparent 22rem),
+    radial-gradient(circle at 82% 88%, rgba(155, 245, 178, 0.075), transparent 26rem),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.025) 0 1px, transparent 1px 22px),
+    var(--bg);
+}
+
+.safe-panel {
+  position: relative;
+  overflow: hidden;
+  background:
+    linear-gradient(115deg, rgba(255, 255, 255, 0.045), transparent 22%),
+    radial-gradient(circle at 50% -8%, rgba(198, 155, 79, 0.18), transparent 18rem),
+    linear-gradient(145deg, rgba(47, 33, 22, 0.98), rgba(17, 12, 9, 0.99));
+}
+
+.safe-panel::before,
+.safe-panel::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+}
+
+.safe-panel::before {
+  inset: 0.48rem;
+  border: 1px solid rgba(198, 155, 79, 0.18);
+  border-radius: 14px;
+  box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.28);
+}
+
+.safe-panel::after {
+  inset: auto 1rem 1rem auto;
+  width: 6rem;
+  height: 6rem;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(198, 155, 79, 0.14), transparent 68%);
+  filter: blur(1px);
+}
+
+.safe-face {
+  position: relative;
+  margin: 0.2rem auto 0.1rem;
+  width: min(360px, 100%);
+  padding: clamp(1.1rem, 2.4vw, 1.55rem);
+  border-radius: 28px;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.055), transparent 28%),
+    radial-gradient(circle at center, rgba(16, 11, 8, 0.16), rgba(0, 0, 0, 0.42) 72%),
+    linear-gradient(145deg, #3a2a1b, #120c08);
+  border: 1px solid rgba(198, 155, 79, 0.34);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 234, 185, 0.05),
+    inset 0 0 48px rgba(0, 0, 0, 0.58),
+    0 22px 42px rgba(0, 0, 0, 0.36);
+}
+
+.safe-face::before,
+.safe-face::after {
+  content: "";
+  position: absolute;
+  inset: 0.85rem;
+  border-radius: 22px;
+  pointer-events: none;
+}
+
+.safe-face::before {
+  background:
+    radial-gradient(circle at 7% 8%, #d8b061 0 0.28rem, #5e4324 0.3rem 0.48rem, transparent 0.5rem),
+    radial-gradient(circle at 93% 8%, #d8b061 0 0.28rem, #5e4324 0.3rem 0.48rem, transparent 0.5rem),
+    radial-gradient(circle at 7% 92%, #d8b061 0 0.28rem, #5e4324 0.3rem 0.48rem, transparent 0.5rem),
+    radial-gradient(circle at 93% 92%, #d8b061 0 0.28rem, #5e4324 0.3rem 0.48rem, transparent 0.5rem);
+  opacity: 0.85;
+}
+
+.safe-face::after {
+  border: 1px solid rgba(198, 155, 79, 0.18);
+  box-shadow: inset 0 0 22px rgba(255, 217, 143, 0.04);
+}
+
+.outer-ring {
+  width: clamp(165px, min(27vw, 30vh), 255px);
+  box-shadow:
+    inset 0 0 18px rgba(255, 230, 170, 0.22),
+    inset 0 0 38px rgba(0, 0, 0, 0.82),
+    0 12px 0 rgba(64, 43, 22, 0.95),
+    0 25px 42px rgba(0, 0, 0, 0.46);
+}
+
+.outer-ring::after {
+  content: "";
+  position: absolute;
+  inset: 7%;
+  z-index: 0;
+  border-radius: 50%;
+  border: 1px dashed rgba(255, 232, 175, 0.18);
+  box-shadow: inset 0 0 18px rgba(0, 0, 0, 0.52);
+  pointer-events: none;
+}
+
+.inner-ring {
+  box-shadow:
+    inset 0 0 28px rgba(0, 0, 0, 0.78),
+    inset 0 0 0 1px rgba(255, 231, 170, 0.04);
+}
+
+.dial-cap {
+  background:
+    radial-gradient(circle at 50% 28%, rgba(255, 239, 190, 0.1), transparent 22%),
+    radial-gradient(circle, #4f3924, #120c08 76%);
+  border-color: rgba(224, 183, 104, 0.62);
+}
+
+.dial-notice {
+  display: inline-block;
+  max-width: 100%;
+  padding: 0.06rem 0.12rem;
+  border-radius: 6px;
+  background: rgba(2, 8, 4, 0.48);
+  box-shadow: inset 0 0 12px rgba(155, 245, 178, 0.08);
+}
+
+.code-entry,
+.dial-pad {
+  position: relative;
+  z-index: 1;
+}
+
+.slots {
+  padding: 0.45rem;
+  border-radius: 14px;
+  background: rgba(0, 0, 0, 0.18);
+  box-shadow: inset 0 0 22px rgba(0, 0, 0, 0.32);
+}
+
+.dial-buttons button {
+  background:
+    linear-gradient(180deg, rgba(255, 222, 166, 0.09), transparent 36%),
+    linear-gradient(180deg, #3e2d1d, #1b120b);
+}
+
+#openButton {
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 244, 208, 0.18),
+    0 8px 14px rgba(0, 0, 0, 0.28),
+    0 0 18px rgba(198, 155, 79, 0.14);
+}
+
+@media (max-height: 760px) and (min-width: 841px) {
+  .safe-face {
+    width: min(305px, 100%);
+    padding: 0.85rem;
+  }
+
+  .outer-ring {
+    width: clamp(140px, min(20vw, 23vh), 200px);
+  }
+}
