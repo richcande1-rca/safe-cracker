@@ -63,11 +63,11 @@ const puzzleBank = [
         test: ([slotA, slotB]) => slotA + slotB === 11,
       },
       {
-        name: "ORDER KEY",
+        name: "OFFSET KEY",
         targets: ["A", "C"],
-        formula: "A < C",
-        text: "The left slot is lower than the right slot.",
-        test: ([slotA, , slotC]) => slotA < slotC,
+        formula: "C = A + 3",
+        text: "The right slot is three clicks higher than the left slot.",
+        test: ([slotA, , slotC]) => slotC === slotA + 3,
       },
       {
         name: "EVEN KEY",
@@ -247,80 +247,6 @@ function getFilledSlotNames() {
 
 function getNextSlotName() {
   return SLOT_LABELS[state.selectedCode.length] || null;
-}
-
-function injectDialNoticeStyles() {
-  if (document.querySelector("#dialNoticeStyles")) {
-    return;
-  }
-
-  const style = document.createElement("style");
-  style.id = "dialNoticeStyles";
-  style.textContent = `
-    .outer-ring {
-      --dial-spin: 0deg;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .outer-ring::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      z-index: 0;
-      border-radius: 50%;
-      background:
-        repeating-conic-gradient(from -8deg, rgba(255, 225, 157, 0.88) 0 4deg, rgba(91, 63, 28, 0.88) 4deg 8deg),
-        radial-gradient(circle, rgba(213, 167, 87, 0.75), rgba(96, 69, 31, 0.55) 68%, transparent 69%);
-      transform: rotate(var(--dial-spin));
-      transition: transform 420ms cubic-bezier(.2,.9,.18,1.05);
-    }
-
-    .inner-ring {
-      position: relative;
-      z-index: 1;
-    }
-
-    .dial-cap {
-      position: relative;
-      z-index: 2;
-      width: 66%;
-      grid-template-rows: auto auto;
-      gap: 0.18rem;
-      padding: 0.45rem;
-      text-align: center;
-    }
-
-    .dial-notice-label {
-      color: var(--brass);
-      font-family: "Courier New", monospace;
-      font-size: 0.52rem;
-      letter-spacing: 0.12em;
-      line-height: 1;
-    }
-
-    .dial-notice {
-      color: var(--crt);
-      font-family: "Courier New", monospace;
-      font-size: clamp(1rem, 2.2vw, 1.75rem);
-      font-weight: 800;
-      letter-spacing: 0.04em;
-      line-height: 0.95;
-      text-shadow: 0 0 16px rgba(155, 245, 178, 0.42);
-    }
-
-    .dial-cap.notice-hot {
-      border-color: rgba(155, 245, 178, 0.72);
-      box-shadow: 0 0 20px rgba(155, 245, 178, 0.16), inset 0 0 16px rgba(155, 245, 178, 0.08);
-    }
-
-    .dial-cap.notice-ready {
-      border-color: rgba(198, 155, 79, 0.76);
-      box-shadow: 0 0 20px rgba(198, 155, 79, 0.16), inset 0 0 16px rgba(198, 155, 79, 0.08);
-    }
-  `;
-
-  document.head.append(style);
 }
 
 function updateDialNotice() {
@@ -608,7 +534,6 @@ function openSafe() {
 }
 
 function boot() {
-  injectDialNoticeStyles();
   loadSafe(0);
 
   clearButton.addEventListener("click", clearCode);
