@@ -69,13 +69,6 @@ const puzzleBank = [
         text: "The right slot is three clicks higher than the left slot.",
         test: ([slotA, , slotC]) => slotC === slotA + 3,
       },
-      {
-        name: "EVEN KEY",
-        targets: ["A"],
-        formula: "A is even",
-        text: "The left slot contains an even number.",
-        test: ([slotA]) => slotA % 2 === 0,
-      },
     ],
   },
   {
