@@ -1,0 +1,320 @@
+/* Visual polish layer: keeps game logic and base layout untouched. */
+
+body {
+  background:
+    radial-gradient(circle at 18% 8%, rgba(255, 206, 120, 0.16), transparent 22rem),
+    radial-gradient(circle at 82% 88%, rgba(155, 245, 178, 0.075), transparent 26rem),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.025) 0 1px, transparent 1px 22px),
+    var(--bg);
+}
+
+.safe-panel {
+  position: relative;
+  overflow: hidden;
+  background:
+    linear-gradient(115deg, rgba(255, 255, 255, 0.045), transparent 22%),
+    radial-gradient(circle at 50% -8%, rgba(198, 155, 79, 0.18), transparent 18rem),
+    linear-gradient(145deg, rgba(47, 33, 22, 0.98), rgba(17, 12, 9, 0.99));
+}
+
+.safe-panel::before,
+.safe-panel::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+}
+
+.safe-panel::before {
+  inset: 0.48rem;
+  border: 1px solid rgba(198, 155, 79, 0.18);
+  border-radius: 14px;
+  box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.28);
+}
+
+.safe-panel::after {
+  inset: auto 1rem 1rem auto;
+  width: 6rem;
+  height: 6rem;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(198, 155, 79, 0.14), transparent 68%);
+  filter: blur(1px);
+}
+
+.safe-face {
+  position: relative;
+  margin: 0.2rem auto 0.1rem;
+  width: min(360px, 100%);
+  padding: clamp(1.05rem, 2.4vw, 1.55rem) clamp(1.05rem, 2.4vw, 1.55rem) 0.9rem;
+  border-radius: 28px;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.055), transparent 28%),
+    radial-gradient(circle at center, rgba(16, 11, 8, 0.16), rgba(0, 0, 0, 0.42) 72%),
+    linear-gradient(145deg, #3a2a1b, #120c08);
+  border: 1px solid rgba(198, 155, 79, 0.34);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 234, 185, 0.05),
+    inset 0 0 48px rgba(0, 0, 0, 0.58),
+    0 22px 42px rgba(0, 0, 0, 0.36);
+}
+
+.safe-face::before,
+.safe-face::after {
+  content: "";
+  position: absolute;
+  inset: 0.85rem;
+  border-radius: 22px;
+  pointer-events: none;
+}
+
+.safe-face::before {
+  background:
+    radial-gradient(circle at 7% 8%, #d8b061 0 0.28rem, #5e4324 0.3rem 0.48rem, transparent 0.5rem),
+    radial-gradient(circle at 93% 8%, #d8b061 0 0.28rem, #5e4324 0.3rem 0.48rem, transparent 0.5rem),
+    radial-gradient(circle at 7% 92%, #d8b061 0 0.28rem, #5e4324 0.3rem 0.48rem, transparent 0.5rem),
+    radial-gradient(circle at 93% 92%, #d8b061 0 0.28rem, #5e4324 0.3rem 0.48rem, transparent 0.5rem);
+  opacity: 0.85;
+}
+
+.safe-face::after {
+  border: 1px solid rgba(198, 155, 79, 0.18);
+  box-shadow: inset 0 0 22px rgba(255, 217, 143, 0.04);
+}
+
+.dial-index-marker {
+  position: absolute;
+  top: 0.82rem;
+  left: 50%;
+  z-index: 7;
+  width: 0;
+  height: 0;
+  transform: translateX(-50%);
+  border-left: 0.44rem solid transparent;
+  border-right: 0.44rem solid transparent;
+  border-top: 0;
+  border-bottom: 0.82rem solid #1a0f06;
+  filter: drop-shadow(0 2px 0 rgba(246, 204, 114, 0.9)) drop-shadow(0 4px 4px rgba(0, 0, 0, 0.62));
+}
+
+.dial-index-marker::after {
+  content: "";
+  position: absolute;
+  left: -0.12rem;
+  top: 0.24rem;
+  width: 0.24rem;
+  height: 0.85rem;
+  border-radius: 999px;
+  background: #f3c66f;
+}
+
+.outer-ring {
+  width: clamp(175px, min(27vw, 30vh), 260px);
+  position: relative;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 46% 34%, rgba(255, 255, 235, 0.62), transparent 0 15%, rgba(255, 255, 255, 0.14) 21%, transparent 32%),
+    radial-gradient(circle at 50% 50%, #fff0a2 0 9%, #d99b22 28%, #ffe782 50%, #d18c1f 76%, #633914 100%) !important;
+  border: 4px solid #1b1008;
+  box-shadow:
+    inset 0 0 0 3px rgba(255, 220, 112, 0.38),
+    inset 0 0 34px rgba(0, 0, 0, 0.26),
+    0 10px 0 rgba(64, 43, 22, 0.95),
+    0 24px 38px rgba(0, 0, 0, 0.46);
+}
+
+.outer-ring::before {
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 0 !important;
+  border-radius: 50% !important;
+  background:
+    radial-gradient(circle at 41% 30%, rgba(255, 255, 241, 0.5), transparent 0 18%, rgba(255, 255, 255, 0.18) 25%, transparent 35%),
+    radial-gradient(circle, transparent 0 30%, rgba(86, 44, 11, 0.7) 31% 33%, transparent 34% 56%, rgba(62, 32, 10, 0.76) 57% 59%, transparent 60% 100%) !important;
+  transform: none !important;
+  transition: none !important;
+}
+
+.outer-ring::after {
+  content: "";
+  position: absolute;
+  inset: 1.5%;
+  z-index: 4;
+  border-radius: 50%;
+  border: 2px solid rgba(37, 19, 8, 0.82);
+  box-shadow: inset 0 0 10px rgba(255, 245, 190, 0.16), inset 0 0 32px rgba(0, 0, 0, 0.2);
+  pointer-events: none;
+}
+
+.dial-scale {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border-radius: 50%;
+  transform: rotate(calc(-1 * var(--dial-spin, 0deg)));
+  transition: transform 420ms cubic-bezier(.2,.9,.18,1.05);
+  pointer-events: none;
+}
+
+.dial-scale::before,
+.dial-scale::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.dial-scale::before {
+  background:
+    repeating-conic-gradient(
+      from -0.45deg,
+      #170d06 0 1.35deg,
+      transparent 1.35deg 4.5deg
+    ),
+    repeating-conic-gradient(
+      from -1.2deg,
+      #170d06 0 3.2deg,
+      transparent 3.2deg 36deg
+    );
+  mask: radial-gradient(circle, transparent 0 67%, #000 68% 96%, transparent 97%);
+}
+
+.dial-scale::after {
+  inset: 25%;
+  border: 3px solid rgba(47, 24, 10, 0.72);
+  box-shadow: 0 0 0 1px rgba(255, 244, 188, 0.34), inset 0 0 15px rgba(0, 0, 0, 0.14);
+}
+
+.dial-scale span {
+  --dial-number-angle: calc(var(--dial-number-index) * 36deg);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: grid;
+  place-items: center;
+  width: 1.2rem;
+  height: 1.2rem;
+  margin: -0.6rem;
+  color: #1b0f06;
+  background: transparent;
+  border: 0;
+  font-family: "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1;
+  text-align: center;
+  text-shadow: 0 1px 0 rgba(255, 232, 142, 0.32);
+  box-shadow: none;
+  transform: rotate(var(--dial-number-angle)) translateY(-6.85rem) rotate(calc(var(--dial-spin, 0deg) - var(--dial-number-angle)));
+}
+
+.dial-hub {
+  position: relative;
+  z-index: 5;
+  width: 25%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 38% 30%, rgba(255, 255, 229, 0.82), transparent 0 20%, rgba(255, 238, 128, 0.38) 30%, transparent 42%),
+    radial-gradient(circle, #ffe375 0 24%, #d49220 50%, #6c370c 72%, #1b0f06 100%);
+  border: 4px solid #231207;
+  box-shadow:
+    0 0 0 5px rgba(255, 222, 100, 0.42),
+    0 0 0 9px rgba(55, 27, 8, 0.82),
+    inset 0 0 13px rgba(255, 249, 190, 0.42),
+    0 8px 13px rgba(0, 0, 0, 0.32);
+}
+
+.dial-plaque {
+  position: relative;
+  z-index: 2;
+  width: min(260px, calc(100% - 2rem));
+  margin: 0.72rem auto 0;
+  border: 1px solid rgba(198, 155, 79, 0.45);
+  border-radius: 12px;
+  background:
+    linear-gradient(180deg, rgba(255, 225, 160, 0.07), transparent 42%),
+    rgba(6, 10, 6, 0.72);
+  box-shadow: inset 0 0 14px rgba(155, 245, 178, 0.07), 0 8px 18px rgba(0, 0, 0, 0.24);
+  padding: 0.38rem 0.55rem;
+  display: grid;
+  gap: 0.08rem;
+  text-align: center;
+}
+
+.dial-notice-label {
+  color: var(--brass);
+  font-family: "Courier New", monospace;
+  font-size: 0.56rem;
+  letter-spacing: 0.14em;
+  line-height: 1;
+}
+
+.dial-notice {
+  display: inline-block;
+  max-width: 100%;
+  padding: 0.05rem 0.16rem;
+  border-radius: 6px;
+  color: var(--crt);
+  background: rgba(2, 8, 4, 0.5);
+  font-family: "Courier New", monospace;
+  font-size: clamp(1rem, 2vw, 1.35rem);
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  line-height: 1.05;
+  text-shadow: 0 0 14px rgba(155, 245, 178, 0.42);
+  box-shadow: inset 0 0 12px rgba(155, 245, 178, 0.08);
+}
+
+.code-entry,
+.dial-pad {
+  position: relative;
+  z-index: 1;
+}
+
+.slots {
+  padding: 0.45rem;
+  border-radius: 14px;
+  background: rgba(0, 0, 0, 0.18);
+  box-shadow: inset 0 0 22px rgba(0, 0, 0, 0.32);
+}
+
+.dial-buttons button {
+  background:
+    linear-gradient(180deg, rgba(255, 222, 166, 0.09), transparent 36%),
+    linear-gradient(180deg, #3e2d1d, #1b120b);
+}
+
+#openButton {
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 244, 208, 0.18),
+    0 8px 14px rgba(0, 0, 0, 0.28),
+    0 0 18px rgba(198, 155, 79, 0.14);
+}
+
+@media (max-height: 760px) and (min-width: 841px) {
+  .safe-face {
+    width: min(305px, 100%);
+    padding: 0.85rem 0.85rem 0.65rem;
+  }
+
+  .outer-ring {
+    width: clamp(140px, min(20vw, 23vh), 200px);
+  }
+
+  .dial-scale span {
+    font-size: 0.82rem;
+    transform: rotate(var(--dial-number-angle)) translateY(-5.25rem) rotate(calc(var(--dial-spin, 0deg) - var(--dial-number-angle)));
+  }
+
+  .dial-hub {
+    width: 26%;
+  }
+
+  .dial-plaque {
+    margin-top: 0.5rem;
+    padding: 0.3rem 0.45rem;
+  }
+}
