@@ -137,6 +137,50 @@ const puzzleBank = [
       },
     ],
   },
+  {
+    title: "Expert Safe 001",
+    clueKeys: [
+      {
+        name: "PEAK KEY",
+        targets: ["B"],
+        formula: "B is highest",
+        text: "The highest number is in the center slot.",
+        test: ([slotA, slotB, slotC]) => slotB > slotA && slotB > slotC,
+      },
+      {
+        name: "POSITION KEY",
+        targets: ["A", "B", "C"],
+        formula: "A is not smallest",
+        text: "The left slot does not contain the smallest number.",
+        test: ([slotA, slotB, slotC]) => slotA !== Math.min(slotA, slotB, slotC),
+      },
+      {
+        name: "COUNT KEY",
+        targets: ["A", "B", "C"],
+        formula: "even(A, B, C) = 2",
+        text: "Exactly two slots contain even numbers.",
+        test: (code) => code.filter((number) => number % 2 === 0).length === 2,
+      },
+      {
+        name: "SEPARATION KEY",
+        targets: ["A", "B", "C"],
+        formula: "no neighbors",
+        text: "No two numbers are consecutive.",
+        test: (code) => code.every((number, index) =>
+          code.every((otherNumber, otherIndex) =>
+            index === otherIndex || Math.abs(number - otherNumber) !== 1,
+          ),
+        ),
+      },
+      {
+        name: "GAP KEY",
+        targets: ["A", "C"],
+        formula: "|A − C| = 4",
+        text: "The left and right slots are four clicks apart.",
+        test: ([slotA, , slotC]) => Math.abs(slotA - slotC) === 4,
+      },
+    ],
+  },
 ];
 
 const state = {
