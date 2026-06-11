@@ -205,6 +205,7 @@ const openButton = document.querySelector("#openButton");
 const safeFace = document.querySelector(".safe-face");
 const safeDial = document.querySelector(".outer-ring");
 const dialNotice = document.querySelector("#dialNotice");
+const currentSafeTitle = document.querySelector("#currentSafeTitle");
 
 function getActivePuzzle() {
   return puzzleBank[state.activePuzzleIndex];
@@ -286,15 +287,23 @@ function getNextSlotName() {
   return SLOT_LABELS[state.selectedCode.length] || null;
 }
 
+function renderSafeTitle() {
+  if (!currentSafeTitle) {
+    return;
+  }
+
+  currentSafeTitle.textContent = getActivePuzzle().title;
+}
+
 function updateDialNotice() {
   if (!dialNotice) {
     return;
   }
 
-  const dialCap = dialNotice.closest(".dial-cap");
+  const dialPlaque = dialNotice.closest(".dial-plaque");
   const nextSlot = getNextSlotName();
 
-  dialCap?.classList.remove("notice-hot", "notice-ready");
+  dialPlaque?.classList.remove("notice-hot", "notice-ready");
 
   if (state.lastSelectedNumber === null) {
     dialNotice.textContent = "NEXT SLOT A";
@@ -303,12 +312,12 @@ function updateDialNotice() {
 
   if (nextSlot) {
     dialNotice.textContent = `SLOT ${state.lastFilledSlot} = ${state.lastSelectedNumber}`;
-    dialCap?.classList.add("notice-hot");
+    dialPlaque?.classList.add("notice-hot");
     return;
   }
 
   dialNotice.textContent = `READY ${state.selectedCode.join("-")}`;
-  dialCap?.classList.add("notice-ready");
+  dialPlaque?.classList.add("notice-ready");
 }
 
 function updateDialSpin() {
@@ -471,6 +480,7 @@ function renderDiagnostics() {
 }
 
 function render() {
+  renderSafeTitle();
   renderSlots();
   renderDial();
   updateDialSpin();
