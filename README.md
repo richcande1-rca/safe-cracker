@@ -11,6 +11,7 @@ The player sees a safe, a 1–10 dial, three labeled code slots, and a Key Compu
 - 1–10 dial
 - no repeated numbers
 - clue keys shown in a computer module
+- rejected attempts leave a short review showing which clue keys passed or failed
 - active safe title shown above the dial so the player can track the current puzzle
 - puzzle validation checks every possible code
 - a safe is considered fair only when the clues produce exactly one solution
@@ -50,8 +51,8 @@ safe-cracker/
 ├─ index.html
 ├─ style.css
 ├─ visual.css
+├─ safe-open-reveal.css
 ├─ script.js
-├─ auto-advance.js
 └─ README.md
 ```
 
