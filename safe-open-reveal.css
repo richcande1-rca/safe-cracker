@@ -8,6 +8,7 @@
 
 .safe-face::after {
   z-index: 1;
+  z-index: 0;
   background:
     radial-gradient(circle at 63% 30%, rgba(255, 255, 235, 0.92) 0 0.1rem, transparent 0.13rem),
     radial-gradient(circle at 68% 34%, rgba(255, 228, 120, 0.84) 0 0.08rem, transparent 0.11rem),
