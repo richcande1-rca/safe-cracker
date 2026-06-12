@@ -17,9 +17,13 @@
 
       <h1 id="game-title">Safe Cracker</h1>
       <p class="tagline">Use clue-keys to eliminate impossible codes. No guessing. Well, less guessing.</p>
+      <p class="safe-title" id="currentSafeTitle" aria-live="polite">Loading safe...</p>
 
       <div class="safe-face" aria-hidden="true">
         <div class="dial-index-marker"></div>
+        <div class="vault-interior">
+          <span>OPEN</span>
+        </div>
         <div class="outer-ring">
           <div class="dial-scale">
             <span style="--dial-number-index: 0">1</span>
@@ -75,6 +79,5 @@
   </main>
 
   <script src="script.js"></script>
-  <script src="auto-advance.js?v=2"></script>
 </body>
 </html>
