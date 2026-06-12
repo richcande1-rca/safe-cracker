@@ -340,6 +340,17 @@ function pulseSafeFace(className = "is-pulsing") {
   }, 520);
 }
 
+function syncSafeOpenUi() {
+  safeFace.classList.toggle("door-open", state.safeOpen);
+  clearButton.disabled = state.safeOpen;
+  openButton.textContent = state.safeOpen ? "Next Safe" : "Open Safe";
+  openButton.setAttribute(
+    "aria-label",
+    state.safeOpen ? "Load the next safe" : "Open safe with entered combination",
+  );
+  openButton.classList.toggle("next-safe", state.safeOpen);
+}
+
 function getClueStatusClass(clue) {
   if (state.lastCheck) {
     return clue.test(state.lastCheck.code) ? "passed" : "failed";
@@ -456,20 +467,6 @@ function renderClues() {
   });
 }
 
-function renderSafeDoor() {
-  safeFace.classList.toggle("door-open", state.safeOpen);
-}
-
-function renderControls() {
-  clearButton.disabled = state.safeOpen;
-  openButton.textContent = state.safeOpen ? "Next Safe" : "Open Safe";
-  openButton.setAttribute(
-    "aria-label",
-    state.safeOpen ? "Load the next safe" : "Open safe with entered combination",
-  );
-  openButton.classList.toggle("next-safe", state.safeOpen);
-}
-
 function renderDiagnostics() {
   const { validation } = state;
   const puzzle = getActivePuzzle();
@@ -502,8 +499,6 @@ function render() {
   updateDialSpin();
   updateDialNotice();
   renderClues();
-  renderSafeDoor();
-  renderControls();
   renderDiagnostics();
 }
 
@@ -512,12 +507,12 @@ function resetEntry() {
   state.lastSelectedNumber = null;
   state.lastFilledSlot = null;
   state.lastCheck = null;
-  state.safeOpen = false;
 }
 
 function loadSafe(puzzleIndex, announce = false) {
   state.activePuzzleIndex = puzzleIndex;
   resetEntry();
+  state.safeOpen = false;
   state.validation = validatePuzzle(getActivePuzzle().clueKeys);
 
   if (announce) {
@@ -526,6 +521,7 @@ function loadSafe(puzzleIndex, announce = false) {
   }
 
   render();
+  syncSafeOpenUi();
   pulseSafeFace();
 }
 
@@ -594,6 +590,7 @@ function openSafe() {
     state.lastCheck = { code: attemptedCode };
     state.safeOpen = true;
     render();
+    syncSafeOpenUi();
 
     resultText.className = "result open";
     resultText.textContent = `SAFE OPEN — ${solution.join("-")}. Door released. Press Next Safe when ready.`;
