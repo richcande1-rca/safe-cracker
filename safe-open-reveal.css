@@ -8,6 +8,7 @@
 
 .safe-face::after {
   z-index: 1;
+  z-index: 0;
   background:
     radial-gradient(circle at 63% 30%, rgba(255, 255, 235, 0.92) 0 0.1rem, transparent 0.13rem),
     radial-gradient(circle at 68% 34%, rgba(255, 228, 120, 0.84) 0 0.08rem, transparent 0.11rem),
@@ -95,20 +96,4 @@
   to {
     filter: saturate(1.18) brightness(1.16);
   }
-}
-
-/* Gold bars are appended as an override to avoid rewriting the older reveal block. */
-.safe-face::after {
-  background:
-    linear-gradient(180deg, rgba(255, 248, 177, 0.98) 0 22%, rgba(240, 181, 45, 0.98) 23% 58%, rgba(142, 80, 15, 0.95) 59% 100%) 38% 58% / 4.6rem 0.95rem no-repeat,
-    linear-gradient(180deg, rgba(255, 241, 143, 0.98) 0 22%, rgba(226, 156, 33, 0.98) 23% 58%, rgba(128, 69, 12, 0.95) 59% 100%) 59% 58% / 4.6rem 0.95rem no-repeat,
-    linear-gradient(180deg, rgba(255, 250, 188, 0.98) 0 22%, rgba(245, 188, 52, 0.98) 23% 58%, rgba(151, 88, 18, 0.95) 59% 100%) 48% 69% / 4.9rem 1rem no-repeat,
-    linear-gradient(180deg, rgba(255, 233, 116, 0.98) 0 22%, rgba(218, 141, 28, 0.98) 23% 58%, rgba(116, 60, 11, 0.95) 59% 100%) 68% 69% / 4.2rem 1rem no-repeat,
-    linear-gradient(90deg, transparent 0 30%, rgba(255, 255, 220, 0.5) 31% 42%, transparent 43% 100%) 38% 58% / 4.6rem 0.95rem no-repeat,
-    linear-gradient(90deg, transparent 0 30%, rgba(255, 255, 220, 0.45) 31% 42%, transparent 43% 100%) 48% 69% / 4.9rem 1rem no-repeat,
-    radial-gradient(circle at 63% 30%, rgba(255, 255, 235, 0.92) 0 0.1rem, transparent 0.13rem),
-    radial-gradient(circle at 68% 34%, rgba(255, 228, 120, 0.84) 0 0.08rem, transparent 0.11rem),
-    radial-gradient(ellipse at 53% 78%, rgba(53, 25, 5, 0.56) 0 28%, transparent 62%),
-    radial-gradient(circle at 50% 42%, rgba(155, 245, 178, 0.2), transparent 0 18%),
-    linear-gradient(145deg, rgba(155, 245, 178, 0.1), rgba(5, 11, 7, 0.92) 58%, rgba(0, 0, 0, 0.98) 100%);
 }

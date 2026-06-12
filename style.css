@@ -108,9 +108,33 @@ h2 {
 
 .tagline {
   max-width: 42rem;
-  margin: 0 0 0.85rem;
+  margin: 0 0 0.45rem;
   color: var(--muted);
   font-size: 0.98rem;
+}
+
+.safe-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin: 0 0 0.65rem;
+  border: 1px solid rgba(198, 155, 79, 0.34);
+  border-radius: 999px;
+  background: rgba(198, 155, 79, 0.1);
+  color: var(--brass);
+  padding: 0.28rem 0.58rem;
+  font-family: "Courier New", monospace;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.safe-title::before {
+  content: "ACTIVE";
+  color: var(--crt);
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
 }
 
 .safe-face {
@@ -209,12 +233,12 @@ h2 {
   text-shadow: 0 0 16px rgba(155, 245, 178, 0.42);
 }
 
-.dial-cap.notice-hot {
+.dial-plaque.notice-hot {
   border-color: rgba(155, 245, 178, 0.72);
   box-shadow: 0 0 20px rgba(155, 245, 178, 0.16), inset 0 0 16px rgba(155, 245, 178, 0.08);
 }
 
-.dial-cap.notice-ready {
+.dial-plaque.notice-ready {
   border-color: rgba(198, 155, 79, 0.76);
   box-shadow: 0 0 20px rgba(198, 155, 79, 0.16), inset 0 0 16px rgba(198, 155, 79, 0.08);
 }
@@ -305,6 +329,11 @@ h2 {
   font-weight: bold;
 }
 
+#openButton.next-safe {
+  background: linear-gradient(180deg, #b7ffc5, #69bd7b);
+  border-color: rgba(155, 245, 178, 0.88);
+}
+
 .dial-buttons {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
@@ -317,12 +346,13 @@ h2 {
 }
 
 .dial-buttons button:hover:not(:disabled),
-.controls-row button:hover {
+.controls-row button:hover:not(:disabled) {
   transform: translateY(-1px);
   border-color: rgba(255, 221, 158, 0.75);
 }
 
-.dial-buttons button:disabled {
+.dial-buttons button:disabled,
+.controls-row button:disabled {
   opacity: 0.38;
   cursor: not-allowed;
 }
@@ -532,8 +562,13 @@ h2 {
   }
 
   .tagline {
-    margin-bottom: 0.45rem;
+    margin-bottom: 0.35rem;
     font-size: 0.9rem;
+  }
+
+  .safe-title {
+    margin-bottom: 0.45rem;
+    font-size: 0.68rem;
   }
 
   .outer-ring {
