@@ -12,7 +12,6 @@ The player sees a safe, a 1–10 dial, three labeled code slots, and a Key Compu
 - no repeated numbers
 - clue keys shown in a computer module
 - rejected attempts leave a short review showing which clue keys passed or failed
-- open-safe reveal shows a cache of gold bars inside the vault
 - active safe title shown above the dial so the player can track the current puzzle
 - puzzle validation checks every possible code
 - a safe is considered fair only when the clues produce exactly one solution
