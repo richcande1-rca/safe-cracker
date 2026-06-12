@@ -190,6 +190,7 @@ const state = {
   lastSelectedNumber: null,
   lastFilledSlot: null,
   lastCheck: null,
+  safeOpen: false,
 };
 
 const codeSlots = document.querySelector("#codeSlots");
@@ -205,6 +206,7 @@ const openButton = document.querySelector("#openButton");
 const safeFace = document.querySelector(".safe-face");
 const safeDial = document.querySelector(".outer-ring");
 const dialNotice = document.querySelector("#dialNotice");
+const currentSafeTitle = document.querySelector("#currentSafeTitle");
 
 function getActivePuzzle() {
   return puzzleBank[state.activePuzzleIndex];
@@ -286,15 +288,23 @@ function getNextSlotName() {
   return SLOT_LABELS[state.selectedCode.length] || null;
 }
 
+function renderSafeTitle() {
+  if (!currentSafeTitle) {
+    return;
+  }
+
+  currentSafeTitle.textContent = getActivePuzzle().title;
+}
+
 function updateDialNotice() {
   if (!dialNotice) {
     return;
   }
 
-  const dialCap = dialNotice.closest(".dial-cap");
+  const dialPlaque = dialNotice.closest(".dial-plaque");
   const nextSlot = getNextSlotName();
 
-  dialCap?.classList.remove("notice-hot", "notice-ready");
+  dialPlaque?.classList.remove("notice-hot", "notice-ready");
 
   if (state.lastSelectedNumber === null) {
     dialNotice.textContent = "NEXT SLOT A";
@@ -303,12 +313,12 @@ function updateDialNotice() {
 
   if (nextSlot) {
     dialNotice.textContent = `SLOT ${state.lastFilledSlot} = ${state.lastSelectedNumber}`;
-    dialCap?.classList.add("notice-hot");
+    dialPlaque?.classList.add("notice-hot");
     return;
   }
 
   dialNotice.textContent = `READY ${state.selectedCode.join("-")}`;
-  dialCap?.classList.add("notice-ready");
+  dialPlaque?.classList.add("notice-ready");
 }
 
 function updateDialSpin() {
@@ -398,6 +408,7 @@ function renderDial() {
     button.dataset.number = String(number);
     button.className = number === state.lastSelectedNumber ? "last-selected" : "";
     button.disabled =
+      state.safeOpen ||
       state.selectedCode.length >= CODE_LENGTH ||
       (!ALLOW_REPEATS && state.selectedCode.includes(number));
 
@@ -445,6 +456,16 @@ function renderClues() {
   });
 }
 
+function renderControls() {
+  clearButton.disabled = state.safeOpen;
+  openButton.textContent = state.safeOpen ? "Next Safe" : "Open Safe";
+  openButton.setAttribute(
+    "aria-label",
+    state.safeOpen ? "Load the next safe" : "Open safe with entered combination",
+  );
+  openButton.classList.toggle("next-safe", state.safeOpen);
+}
+
 function renderDiagnostics() {
   const { validation } = state;
   const puzzle = getActivePuzzle();
@@ -471,11 +492,13 @@ function renderDiagnostics() {
 }
 
 function render() {
+  renderSafeTitle();
   renderSlots();
   renderDial();
   updateDialSpin();
   updateDialNotice();
   renderClues();
+  renderControls();
   renderDiagnostics();
 }
 
@@ -484,6 +507,7 @@ function resetEntry() {
   state.lastSelectedNumber = null;
   state.lastFilledSlot = null;
   state.lastCheck = null;
+  state.safeOpen = false;
 }
 
 function loadSafe(puzzleIndex, announce = false) {
@@ -501,7 +525,7 @@ function loadSafe(puzzleIndex, announce = false) {
 }
 
 function selectNumber(number) {
-  if (state.selectedCode.length >= CODE_LENGTH) {
+  if (state.safeOpen || state.selectedCode.length >= CODE_LENGTH) {
     return;
   }
 
@@ -522,6 +546,10 @@ function selectNumber(number) {
 }
 
 function clearCode() {
+  if (state.safeOpen) {
+    return;
+  }
+
   resetEntry();
 
   resultText.className = "result";
@@ -535,6 +563,11 @@ function loadNextSafe() {
 }
 
 function openSafe() {
+  if (state.safeOpen) {
+    loadNextSafe();
+    return;
+  }
+
   if (!state.validation?.isFair) {
     resultText.className = "result locked";
     resultText.textContent = "Module fault. This safe has no proven fair solution.";
@@ -554,10 +587,11 @@ function openSafe() {
 
   if (codesMatch(attemptedCode, solution)) {
     state.lastCheck = { code: attemptedCode };
+    state.safeOpen = true;
     render();
 
     resultText.className = "result open";
-    resultText.textContent = `SAFE OPEN — ${solution.join("-")}. The tumblers surrender.`;
+    resultText.textContent = `SAFE OPEN — ${solution.join("-")}. Door released. Press Next Safe when ready.`;
     pulseSafeFace("is-open");
     return;
   }

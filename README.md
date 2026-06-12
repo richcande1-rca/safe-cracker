@@ -11,6 +11,7 @@ The player sees a safe, a 1–10 dial, three labeled code slots, and a Key Compu
 - 1–10 dial
 - no repeated numbers
 - clue keys shown in a computer module
+- active safe title and Rules of Entry (ROE) shown above the dial so the player can track the current puzzle constraints
 - puzzle validation checks every possible code
 - a safe is considered fair only when the clues produce exactly one solution
 
@@ -26,6 +27,10 @@ Every clue must be:
 4. usable by the validator to prove the puzzle has one fair solution
 
 Flavor names are allowed later, but v0.1 uses functional key names so the player can immediately understand what each key does.
+
+## Puzzle set
+
+The prototype currently includes five validated safes: four training safes and one expert safe. The New Safe button cycles through the bank, and the active safe label confirms which puzzle is loaded. The Rules of Entry strip keeps the global constraints visible: three slots, a 1–10 dial, no repeated numbers, and one proven solution. After a correct code, the safe stays open until the player presses Next Safe.
 
 ## First puzzle
 
@@ -44,6 +49,7 @@ The game engine validates the clue set before the player starts.
 safe-cracker/
 ├─ index.html
 ├─ style.css
+├─ visual.css
 ├─ script.js
 └─ README.md
 ```
