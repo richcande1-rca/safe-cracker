@@ -41,7 +41,9 @@ body {
 }
 
 .safe-face {
+  --safe-door-size: clamp(175px, min(27vw, 30vh), 260px);
   position: relative;
+  perspective: 900px;
   margin: 0.2rem auto 0.1rem;
   width: min(360px, 100%);
   padding: clamp(1.05rem, 2.4vw, 1.55rem) clamp(1.05rem, 2.4vw, 1.55rem) 0.9rem;
@@ -106,9 +108,57 @@ body {
   background: #f3c66f;
 }
 
-.outer-ring {
-  width: clamp(175px, min(27vw, 30vh), 260px);
+.vault-interior {
+  position: absolute;
+  top: clamp(1.05rem, 2.4vw, 1.55rem);
+  left: 50%;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: var(--safe-door-size);
+  aspect-ratio: 1;
+  border: 4px solid rgba(198, 155, 79, 0.32);
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 50% 42%, rgba(155, 245, 178, 0.22), transparent 0 18%),
+    radial-gradient(circle, rgba(155, 245, 178, 0.12), rgba(5, 11, 7, 0.94) 58%, rgba(0, 0, 0, 0.98) 100%);
+  box-shadow:
+    inset 0 0 36px rgba(0, 0, 0, 0.82),
+    inset 0 0 22px rgba(155, 245, 178, 0.12),
+    0 18px 30px rgba(0, 0, 0, 0.34);
+  opacity: 0;
+  transform: translateX(-50%) scale(0.92);
+  transition: opacity 260ms ease 160ms, transform 520ms ease;
+}
+
+.vault-interior::before {
+  content: "";
+  position: absolute;
+  inset: 18%;
+  border: 1px solid rgba(155, 245, 178, 0.16);
+  border-radius: 50%;
+  box-shadow: inset 0 0 20px rgba(155, 245, 178, 0.08);
+}
+
+.vault-interior span {
   position: relative;
+  color: var(--crt);
+  font-family: "Courier New", monospace;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-shadow: 0 0 16px rgba(155, 245, 178, 0.58);
+}
+
+.safe-face.door-open .vault-interior {
+  opacity: 1;
+  transform: translateX(-50%) scale(1);
+}
+
+.outer-ring {
+  width: var(--safe-door-size);
+  position: relative;
+  z-index: 3;
   display: grid;
   place-items: center;
   overflow: hidden;
@@ -121,6 +171,22 @@ body {
     inset 0 0 34px rgba(0, 0, 0, 0.26),
     0 10px 0 rgba(64, 43, 22, 0.95),
     0 24px 38px rgba(0, 0, 0, 0.46);
+  transform-origin: 12% 50%;
+  transition: transform 760ms cubic-bezier(.18,.84,.22,1.02), filter 180ms ease, box-shadow 180ms ease;
+}
+
+.safe-face.door-open.is-open .outer-ring {
+  animation: none;
+}
+
+.safe-face.door-open .outer-ring {
+  filter: brightness(1.12);
+  transform: translateX(-15%) rotateY(-68deg) rotateZ(-2deg);
+  box-shadow:
+    inset 0 0 0 3px rgba(255, 220, 112, 0.38),
+    inset 0 0 34px rgba(0, 0, 0, 0.34),
+    12px 10px 0 rgba(64, 43, 22, 0.82),
+    30px 26px 42px rgba(0, 0, 0, 0.5);
 }
 
 .outer-ring::before {
@@ -296,12 +362,9 @@ body {
 
 @media (max-height: 760px) and (min-width: 841px) {
   .safe-face {
+    --safe-door-size: clamp(140px, min(20vw, 23vh), 200px);
     width: min(305px, 100%);
     padding: 0.85rem 0.85rem 0.65rem;
-  }
-
-  .outer-ring {
-    width: clamp(140px, min(20vw, 23vh), 200px);
   }
 
   .dial-scale span {
