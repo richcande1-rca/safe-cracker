@@ -329,6 +329,11 @@ h2 {
   font-weight: bold;
 }
 
+#openButton.next-safe {
+  background: linear-gradient(180deg, #b7ffc5, #69bd7b);
+  border-color: rgba(155, 245, 178, 0.88);
+}
+
 .dial-buttons {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
@@ -341,12 +346,13 @@ h2 {
 }
 
 .dial-buttons button:hover:not(:disabled),
-.controls-row button:hover {
+.controls-row button:hover:not(:disabled) {
   transform: translateY(-1px);
   border-color: rgba(255, 221, 158, 0.75);
 }
 
-.dial-buttons button:disabled {
+.dial-buttons button:disabled,
+.controls-row button:disabled {
   opacity: 0.38;
   cursor: not-allowed;
 }
