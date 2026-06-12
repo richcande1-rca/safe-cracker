@@ -1,11 +1,13 @@
 /* Add-on open-safe reveal layer kept separate to reduce merge-conflict risk. */
 
 .safe-face {
+  isolation: isolate;
   perspective: 900px;
   transform-style: preserve-3d;
 }
 
 .safe-face::after {
+  z-index: 1;
   z-index: 0;
   background:
     radial-gradient(circle at 63% 30%, rgba(255, 255, 235, 0.92) 0 0.1rem, transparent 0.13rem),
@@ -26,6 +28,19 @@
   opacity: 1;
   transform: scale(1);
   animation: treasureGleam 1800ms ease-in-out infinite alternate;
+  box-shadow:
+    inset 0 0 22px rgba(255, 217, 143, 0.04),
+    inset 0 -18px 34px rgba(236, 166, 55, 0.14),
+    0 0 34px rgba(255, 205, 86, 0.18);
+}
+
+.safe-face::before {
+  z-index: 2;
+}
+
+.outer-ring,
+.dial-plaque {
+  z-index: 4;
 }
 
 .safe-panel:has(.result.open) .safe-face::before {
