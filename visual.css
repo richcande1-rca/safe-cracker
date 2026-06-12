@@ -1,4 +1,5 @@
 /* Visual polish layer: keeps game logic and base layout untouched. */
+@import url("./safe-open-reveal.css");
 
 body {
   background:
