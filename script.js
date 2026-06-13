@@ -3,6 +3,8 @@ const DIAL_MAX = 10;
 const CODE_LENGTH = 3;
 const ALLOW_REPEATS = false;
 const SLOT_LABELS = ["A", "B", "C"];
+const GENERATED_CLUE_COUNT = 4;
+const GENERATED_SAFE_ATTEMPTS = 400;
 
 const puzzleBank = [
   {
@@ -191,6 +193,7 @@ const state = {
   lastFilledSlot: null,
   lastCheck: null,
   safeOpen: false,
+  generatedSafeCount: 0,
 };
 
 const codeSlots = document.querySelector("#codeSlots");
@@ -202,6 +205,7 @@ const moduleLight = document.querySelector("#moduleLight");
 const diagnosticText = document.querySelector("#diagnosticText");
 const clearButton = document.querySelector("#clearButton");
 const newSafeButton = document.querySelector("#newSafeButton");
+const generateSafeButton = document.querySelector("#generateSafeButton");
 const openButton = document.querySelector("#openButton");
 const safeFace = document.querySelector(".safe-face");
 const safeDial = document.querySelector(".outer-ring");
@@ -270,6 +274,188 @@ function validatePuzzle(clues) {
     possibleSolutions,
     isFair: possibleSolutions.length === 1,
   };
+}
+
+function shuffleItems(items) {
+  const shuffled = [...items];
+
+  for (let index = shuffled.length - 1; index > 0; index -= 1) {
+    const swapIndex = Math.floor(Math.random() * (index + 1));
+    [shuffled[index], shuffled[swapIndex]] = [shuffled[swapIndex], shuffled[index]];
+  }
+
+  return shuffled;
+}
+
+function createRandomCode() {
+  return shuffleItems(getDialNumbers()).slice(0, CODE_LENGTH);
+}
+
+function makeGeneratedClue({ name, targets, formula, text, test, type }) {
+  return { name, targets, formula, text, test, type };
+}
+
+function createGeneratedClueCandidates(targetCode) {
+  const candidates = [];
+  const total = targetCode.reduce((sum, number) => sum + number, 0);
+  const oddCount = targetCode.filter((number) => number % 2 !== 0).length;
+  const evenCount = CODE_LENGTH - oddCount;
+  const highest = Math.max(...targetCode);
+  const lowest = Math.min(...targetCode);
+  const pairs = [[0, 1], [1, 2], [0, 2]];
+
+  targetCode.forEach((number, index) => {
+    const label = SLOT_LABELS[index];
+    const parity = number % 2 === 0 ? "even" : "odd";
+
+    candidates.push(makeGeneratedClue({
+      name: "PARITY KEY",
+      targets: [label],
+      formula: `${label} is ${parity}`,
+      text: `Slot ${label} is ${parity}.`,
+      test: (code) => code[index] % 2 === number % 2,
+      type: "parity",
+    }));
+  });
+
+  pairs.forEach(([leftIndex, rightIndex]) => {
+    const leftLabel = SLOT_LABELS[leftIndex];
+    const rightLabel = SLOT_LABELS[rightIndex];
+    const isLower = targetCode[leftIndex] < targetCode[rightIndex];
+    const gap = Math.abs(targetCode[leftIndex] - targetCode[rightIndex]);
+
+    candidates.push(makeGeneratedClue({
+      name: "ORDER KEY",
+      targets: [leftLabel, rightLabel],
+      formula: `${leftLabel} ${isLower ? "<" : ">"} ${rightLabel}`,
+      text: `Slot ${leftLabel} is ${isLower ? "lower" : "higher"} than Slot ${rightLabel}.`,
+      test: (code) => isLower ? code[leftIndex] < code[rightIndex] : code[leftIndex] > code[rightIndex],
+      type: "order",
+    }));
+
+    candidates.push(makeGeneratedClue({
+      name: "GAP KEY",
+      targets: [leftLabel, rightLabel],
+      formula: `|${leftLabel} − ${rightLabel}| = ${gap}`,
+      text: `Slots ${leftLabel} and ${rightLabel} are ${gap} clicks apart.`,
+      test: (code) => Math.abs(code[leftIndex] - code[rightIndex]) === gap,
+      type: "gap",
+    }));
+  });
+
+  candidates.push(makeGeneratedClue({
+    name: "TOTAL KEY",
+    targets: [...SLOT_LABELS],
+    formula: `A + B + C = ${total}`,
+    text: `All three slots add to ${total}.`,
+    test: (code) => code.reduce((sum, number) => sum + number, 0) === total,
+    type: "total",
+  }));
+
+  candidates.push(makeGeneratedClue({
+    name: "COUNT KEY",
+    targets: [...SLOT_LABELS],
+    formula: `odd(A, B, C) = ${oddCount}`,
+    text: `Exactly ${oddCount} slot${oddCount === 1 ? "" : "s"} contain odd numbers.`,
+    test: (code) => code.filter((number) => number % 2 !== 0).length === oddCount,
+    type: "count",
+  }));
+
+  candidates.push(makeGeneratedClue({
+    name: "COUNT KEY",
+    targets: [...SLOT_LABELS],
+    formula: `even(A, B, C) = ${evenCount}`,
+    text: `Exactly ${evenCount} slot${evenCount === 1 ? "" : "s"} contain even numbers.`,
+    test: (code) => code.filter((number) => number % 2 === 0).length === evenCount,
+    type: "count",
+  }));
+
+  candidates.push(makeGeneratedClue({
+    name: "PEAK KEY",
+    targets: [SLOT_LABELS[targetCode.indexOf(highest)]],
+    formula: `${SLOT_LABELS[targetCode.indexOf(highest)]} is highest`,
+    text: `The highest number is in Slot ${SLOT_LABELS[targetCode.indexOf(highest)]}.`,
+    test: (code) => code.indexOf(Math.max(...code)) === targetCode.indexOf(highest),
+    type: "position",
+  }));
+
+  candidates.push(makeGeneratedClue({
+    name: "LOW KEY",
+    targets: [SLOT_LABELS[targetCode.indexOf(lowest)]],
+    formula: `${SLOT_LABELS[targetCode.indexOf(lowest)]} is lowest`,
+    text: `The lowest number is in Slot ${SLOT_LABELS[targetCode.indexOf(lowest)]}.`,
+    test: (code) => code.indexOf(Math.min(...code)) === targetCode.indexOf(lowest),
+    type: "position",
+  }));
+
+  targetCode.forEach((number) => {
+    candidates.push(makeGeneratedClue({
+      name: "VALUE KEY",
+      targets: [...SLOT_LABELS],
+      formula: `${number} is present`,
+      text: `One slot contains ${number}.`,
+      test: (code) => code.includes(number),
+      type: "value",
+    }));
+  });
+
+  return candidates;
+}
+
+function pickGeneratedClues(candidates) {
+  const typeLimits = {
+    count: 1,
+    gap: 2,
+    order: 2,
+    parity: 2,
+    position: 1,
+    total: 1,
+    value: 1,
+  };
+  const typeCounts = {};
+  const chosen = [];
+
+  for (const clue of shuffleItems(candidates)) {
+    const nextCount = (typeCounts[clue.type] || 0) + 1;
+
+    if (nextCount > typeLimits[clue.type]) {
+      continue;
+    }
+
+    chosen.push(clue);
+    typeCounts[clue.type] = nextCount;
+
+    if (chosen.length === GENERATED_CLUE_COUNT) {
+      return chosen;
+    }
+  }
+
+  return null;
+}
+
+function createRandomGeneratedPuzzle() {
+  for (let attempt = 0; attempt < GENERATED_SAFE_ATTEMPTS; attempt += 1) {
+    const targetCode = createRandomCode();
+    const candidates = createGeneratedClueCandidates(targetCode);
+    const clueKeys = pickGeneratedClues(candidates);
+
+    if (!clueKeys) {
+      continue;
+    }
+
+    const validation = validatePuzzle(clueKeys);
+
+    if (validation.isFair && codesMatch(validation.possibleSolutions[0], targetCode)) {
+      state.generatedSafeCount += 1;
+
+      return {
+        title: `Generated Safe ${String(state.generatedSafeCount).padStart(3, "0")}`,
+        clueKeys,
+      };
+    }
+  }
+
+  return null;
 }
 
 function countPassedClues(code) {
@@ -492,6 +678,7 @@ function renderDiagnostics() {
     moduleLight.textContent = "ONLINE";
     integrityStatus.classList.remove("bad");
     moduleLight.classList.remove("bad");
+
     diagnosticText.textContent = `${puzzle.title}: ${validation.totalCodes} possible codes scanned. Clue field resolves to one fair solution.`;
   } else {
     integrityStatus.textContent = "Unstable";
@@ -575,6 +762,20 @@ function loadNextSafe() {
   loadSafe(nextPuzzleIndex, true);
 }
 
+function loadGeneratedSafe() {
+  const generatedPuzzle = createRandomGeneratedPuzzle();
+
+  if (!generatedPuzzle) {
+    resultText.className = "result locked";
+    resultText.textContent = "Generator jammed. Try again.";
+    pulseSafeFace("is-denied");
+    return;
+  }
+
+  puzzleBank.push(generatedPuzzle);
+  loadSafe(puzzleBank.length - 1, true);
+}
+
 function openSafe() {
   if (state.safeOpen) {
     loadNextSafe();
@@ -623,6 +824,7 @@ function boot() {
 
   clearButton.addEventListener("click", clearCode);
   newSafeButton.addEventListener("click", loadNextSafe);
+  generateSafeButton.addEventListener("click", loadGeneratedSafe);
   openButton.addEventListener("click", openSafe);
 }
 

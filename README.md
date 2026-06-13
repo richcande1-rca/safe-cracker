@@ -11,7 +11,9 @@ The player sees a safe, a 1–10 dial, three labeled code slots, and a Key Compu
 - 1–10 dial
 - no repeated numbers
 - clue keys shown in a computer module
+- open-safe reveal shows a cache of gold bars inside the vault
 - active safe title shown above the dial so the player can track the current puzzle
+- Generate Safe creates a validated random no-repeat safe with four clue keys
 - puzzle validation checks every possible code
 - a safe is considered fair only when the clues produce exactly one solution
 
@@ -30,7 +32,7 @@ Flavor names are allowed later, but v0.1 uses functional key names so the player
 
 ## Puzzle set
 
-The prototype currently includes five validated safes: four training safes and one expert safe. The New Safe button cycles through the bank, and the active safe label confirms which puzzle is loaded.
+The prototype currently includes five validated safes: four training safes and one expert safe. The New Safe button cycles through the bank, Generate Safe creates a validated random no-repeat safe, and the active safe label confirms which puzzle is loaded.
 
 ## First puzzle
 
@@ -50,8 +52,8 @@ safe-cracker/
 ├─ index.html
 ├─ style.css
 ├─ visual.css
+├─ safe-open-reveal.css
 ├─ script.js
-├─ auto-advance.js
 └─ README.md
 ```
 
