@@ -11,7 +11,7 @@ The player sees a safe, a 1–10 dial, three labeled code slots, and a Key Compu
 - 1–10 dial
 - no repeated numbers
 - clue keys shown in a computer module
-- open-safe reveal shows a cache of gold bars inside the vault
+- rejected attempts leave a short review showing which clue keys passed or failed
 - active safe title shown above the dial so the player can track the current puzzle
 - Generate Safe creates a validated random no-repeat safe with four clue keys
 - puzzle validation checks every possible code

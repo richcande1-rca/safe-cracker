@@ -679,6 +679,14 @@ function renderDiagnostics() {
     integrityStatus.classList.remove("bad");
     moduleLight.classList.remove("bad");
 
+    if (state.lastCheck && !state.safeOpen) {
+      const passedClueCount = countPassedClues(state.lastCheck.code);
+      const totalClueCount = puzzle.clueKeys.length;
+
+      diagnosticText.textContent = `${puzzle.title}: last attempt ${state.lastCheck.code.join("-")} passed ${passedClueCount} of ${totalClueCount} clue keys. Review the highlighted keys, then dial again.`;
+      return;
+    }
+
     diagnosticText.textContent = `${puzzle.title}: ${validation.totalCodes} possible codes scanned. Clue field resolves to one fair solution.`;
   } else {
     integrityStatus.textContent = "Unstable";
@@ -700,11 +708,15 @@ function render() {
   renderDiagnostics();
 }
 
-function resetEntry() {
+function resetEntry({ keepLastCheck = false } = {}) {
   state.selectedCode = [];
   state.lastSelectedNumber = null;
   state.lastFilledSlot = null;
-  state.lastCheck = null;
+
+  if (!keepLastCheck) {
+    state.lastCheck = null;
+  }
+
   state.safeOpen = false;
 }
 
@@ -811,11 +823,15 @@ function openSafe() {
     return;
   }
 
-  resetEntry();
+  state.lastCheck = { code: attemptedCode };
+  resetEntry({ keepLastCheck: true });
   render();
 
+  const passedClueCount = countPassedClues(attemptedCode);
+  const totalClueCount = getActivePuzzle().clueKeys.length;
+
   resultText.className = "result locked";
-  resultText.textContent = "LOCKED — sequence rejected. Combination cleared.";
+  resultText.textContent = `LOCKED — ${passedClueCount}/${totalClueCount} clue keys accepted ${attemptedCode.join("-")}. Review the highlighted keys; combination cleared.`;
   pulseSafeFace("is-denied");
 }
 
