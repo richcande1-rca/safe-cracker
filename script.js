@@ -222,6 +222,7 @@ const state = {
 const codeSlots = document.querySelector("#codeSlots");
 const dialButtons = document.querySelector("#dialButtons");
 const clueList = document.querySelector("#clueList");
+const unlockList = document.querySelector("#unlockList");
 const resultText = document.querySelector("#resultText");
 const integrityStatus = document.querySelector("#integrityStatus");
 const moduleLight = document.querySelector("#moduleLight");
@@ -636,6 +637,25 @@ function renderDial() {
   }
 }
 
+function renderUnlocks() {
+  unlockList.innerHTML = "";
+
+  CLUE_TYPE_CATALOG.forEach((clueType) => {
+    const isUnlocked = state.unlockedClueTypes.includes(clueType.type);
+    const item = document.createElement("li");
+    item.className = `unlock-item ${isUnlocked ? "unlocked" : "locked"}`;
+
+    const name = document.createElement("strong");
+    name.textContent = isUnlocked ? clueType.label : "??? KEY";
+
+    const status = document.createElement("span");
+    status.textContent = isUnlocked ? "decoded" : "crack more safes to decode";
+
+    item.append(name, status);
+    unlockList.append(item);
+  });
+}
+
 function renderClues() {
   clueList.innerHTML = "";
 
@@ -726,6 +746,7 @@ function render() {
   updateDialSpin();
   updateDialNotice();
   renderClues();
+  renderUnlocks();
   renderControls();
   renderDiagnostics();
 }
