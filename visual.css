@@ -332,7 +332,7 @@ body {
   text-align: center;
   text-shadow: 0 1px 0 rgba(255, 232, 142, 0.32);
   box-shadow: none;
-  transform: rotate(var(--dial-number-angle)) translateY(-6.85rem) rotate(calc(var(--dial-spin, 0deg) - var(--dial-number-angle)));
+  transform: rotate(var(--dial-number-angle)) translateY(calc(var(--safe-door-size) * -0.405)) rotate(calc(var(--dial-spin, 0deg) - var(--dial-number-angle)));
 }
 
 .dial-hub {
@@ -423,14 +423,14 @@ body {
 
 @media (max-height: 760px) and (min-width: 841px) {
   .safe-face {
-    --safe-door-size: clamp(140px, min(20vw, 23vh), 200px);
+    --safe-door-size: clamp(165px, min(24vw, 27vh), 235px);
     width: min(305px, 100%);
     padding: 0.85rem 0.85rem 0.65rem;
   }
 
   .dial-scale span {
     font-size: 0.82rem;
-    transform: rotate(var(--dial-number-angle)) translateY(-5.25rem) rotate(calc(var(--dial-spin, 0deg) - var(--dial-number-angle)));
+    transform: rotate(var(--dial-number-angle)) translateY(calc(var(--safe-door-size) * -0.405)) rotate(calc(var(--dial-spin, 0deg) - var(--dial-number-angle)));
   }
 
   .dial-hub {

@@ -5,6 +5,18 @@ const ALLOW_REPEATS = false;
 const SLOT_LABELS = ["A", "B", "C"];
 const GENERATED_CLUE_COUNT = 4;
 const GENERATED_SAFE_ATTEMPTS = 400;
+const STARTING_CLUE_TYPES = ["sum", "offset", "scale", "parity"];
+const CLUE_TYPE_CATALOG = [
+  { type: "sum", label: "SUM KEY" },
+  { type: "offset", label: "OFFSET KEY" },
+  { type: "scale", label: "SCALE KEY" },
+  { type: "parity", label: "PARITY KEY" },
+  { type: "order", label: "ORDER KEY" },
+  { type: "gap", label: "GAP KEY" },
+  { type: "count", label: "COUNT KEY" },
+  { type: "separation", label: "SEPARATION KEY" },
+  { type: "value", label: "VALUE KEY" },
+];
 
 const puzzleBank = [
   {
@@ -12,6 +24,7 @@ const puzzleBank = [
     clueKeys: [
       {
         name: "SUM KEY",
+        type: "sum",
         targets: ["A", "C"],
         formula: "A + C = 11",
         text: "The left and right slots add to 11.",
@@ -19,6 +32,7 @@ const puzzleBank = [
       },
       {
         name: "SCALE KEY",
+        type: "scale",
         targets: ["A", "B"],
         formula: "B = A × 2",
         text: "The center slot is double the left slot.",
@@ -26,6 +40,7 @@ const puzzleBank = [
       },
       {
         name: "OFFSET KEY",
+        type: "offset",
         targets: ["B", "C"],
         formula: "C = B − 1",
         text: "The right slot is one click lower than the center slot.",
@@ -33,6 +48,7 @@ const puzzleBank = [
       },
       {
         name: "PARITY KEY",
+        type: "parity",
         targets: ["A", "B", "C"],
         formula: "odd(A, B, C) = 1",
         text: "Exactly one slot contains an odd number.",
@@ -45,6 +61,7 @@ const puzzleBank = [
     clueKeys: [
       {
         name: "SUM KEY",
+        type: "sum",
         targets: ["A", "C"],
         formula: "A + C = 7",
         text: "The left and right slots add to 7.",
@@ -52,6 +69,7 @@ const puzzleBank = [
       },
       {
         name: "GAP KEY",
+        type: "gap",
         targets: ["B", "C"],
         formula: "B − C = 4",
         text: "The center slot is four clicks higher than the right slot.",
@@ -59,6 +77,7 @@ const puzzleBank = [
       },
       {
         name: "PAIR KEY",
+        type: "sum",
         targets: ["A", "B"],
         formula: "A + B = 11",
         text: "The left and center slots add to 11.",
@@ -66,6 +85,7 @@ const puzzleBank = [
       },
       {
         name: "OFFSET KEY",
+        type: "offset",
         targets: ["A", "C"],
         formula: "C = A + 3",
         text: "The right slot is three clicks higher than the left slot.",
@@ -78,6 +98,7 @@ const puzzleBank = [
     clueKeys: [
       {
         name: "SCALE KEY",
+        type: "scale",
         targets: ["A", "B"],
         formula: "A = B × 2",
         text: "The left slot is double the center slot.",
@@ -85,6 +106,7 @@ const puzzleBank = [
       },
       {
         name: "TOTAL KEY",
+        type: "sum",
         targets: ["A", "B", "C"],
         formula: "A + B + C = 19",
         text: "All three slots add to 19.",
@@ -92,6 +114,7 @@ const puzzleBank = [
       },
       {
         name: "GAP KEY",
+        type: "gap",
         targets: ["A", "C"],
         formula: "C − A = 4",
         text: "The right slot is four clicks higher than the left slot.",
@@ -99,6 +122,7 @@ const puzzleBank = [
       },
       {
         name: "PARITY KEY",
+        type: "parity",
         targets: ["B"],
         formula: "B is odd",
         text: "The center slot is odd.",
@@ -111,6 +135,7 @@ const puzzleBank = [
     clueKeys: [
       {
         name: "SUM KEY",
+        type: "sum",
         targets: ["A", "B"],
         formula: "A + B = 13",
         text: "The left and center slots add to 13.",
@@ -118,6 +143,7 @@ const puzzleBank = [
       },
       {
         name: "SCALE KEY",
+        type: "scale",
         targets: ["B", "C"],
         formula: "B = C × 2",
         text: "The center slot is double the right slot.",
@@ -125,6 +151,7 @@ const puzzleBank = [
       },
       {
         name: "GAP KEY",
+        type: "gap",
         targets: ["A", "C"],
         formula: "A − C = 7",
         text: "The left slot is seven clicks higher than the right slot.",
@@ -132,6 +159,7 @@ const puzzleBank = [
       },
       {
         name: "PARITY KEY",
+        type: "parity",
         targets: ["A", "B", "C"],
         formula: "even(A, B, C) = 2",
         text: "Exactly two slots contain even numbers.",
@@ -144,6 +172,7 @@ const puzzleBank = [
     clueKeys: [
       {
         name: "PEAK KEY",
+        type: "order",
         targets: ["B"],
         formula: "B is highest",
         text: "The highest number is in the center slot.",
@@ -151,6 +180,7 @@ const puzzleBank = [
       },
       {
         name: "POSITION KEY",
+        type: "order",
         targets: ["A", "B", "C"],
         formula: "A is not smallest",
         text: "The left slot does not contain the smallest number.",
@@ -158,6 +188,7 @@ const puzzleBank = [
       },
       {
         name: "COUNT KEY",
+        type: "count",
         targets: ["A", "B", "C"],
         formula: "even(A, B, C) = 2",
         text: "Exactly two slots contain even numbers.",
@@ -165,6 +196,7 @@ const puzzleBank = [
       },
       {
         name: "SEPARATION KEY",
+        type: "separation",
         targets: ["A", "B", "C"],
         formula: "no neighbors",
         text: "No two numbers are consecutive.",
@@ -176,6 +208,7 @@ const puzzleBank = [
       },
       {
         name: "GAP KEY",
+        type: "gap",
         targets: ["A", "C"],
         formula: "|A − C| = 4",
         text: "The left and right slots are four clicks apart.",
@@ -194,11 +227,13 @@ const state = {
   lastCheck: null,
   safeOpen: false,
   generatedSafeCount: 0,
+  unlockedClueTypes: [...STARTING_CLUE_TYPES],
 };
 
 const codeSlots = document.querySelector("#codeSlots");
 const dialButtons = document.querySelector("#dialButtons");
 const clueList = document.querySelector("#clueList");
+const unlockList = document.querySelector("#unlockList");
 const resultText = document.querySelector("#resultText");
 const integrityStatus = document.querySelector("#integrityStatus");
 const moduleLight = document.querySelector("#moduleLight");
@@ -349,7 +384,7 @@ function createGeneratedClueCandidates(targetCode) {
     formula: `A + B + C = ${total}`,
     text: `All three slots add to ${total}.`,
     test: (code) => code.reduce((sum, number) => sum + number, 0) === total,
-    type: "total",
+    type: "sum",
   }));
 
   candidates.push(makeGeneratedClue({
@@ -376,7 +411,7 @@ function createGeneratedClueCandidates(targetCode) {
     formula: `${SLOT_LABELS[targetCode.indexOf(highest)]} is highest`,
     text: `The highest number is in Slot ${SLOT_LABELS[targetCode.indexOf(highest)]}.`,
     test: (code) => code.indexOf(Math.max(...code)) === targetCode.indexOf(highest),
-    type: "position",
+    type: "order",
   }));
 
   candidates.push(makeGeneratedClue({
@@ -385,7 +420,7 @@ function createGeneratedClueCandidates(targetCode) {
     formula: `${SLOT_LABELS[targetCode.indexOf(lowest)]} is lowest`,
     text: `The lowest number is in Slot ${SLOT_LABELS[targetCode.indexOf(lowest)]}.`,
     test: (code) => code.indexOf(Math.min(...code)) === targetCode.indexOf(lowest),
-    type: "position",
+    type: "order",
   }));
 
   targetCode.forEach((number) => {
@@ -408,8 +443,7 @@ function pickGeneratedClues(candidates) {
     gap: 2,
     order: 2,
     parity: 2,
-    position: 1,
-    total: 1,
+    sum: 1,
     value: 1,
   };
   const typeCounts = {};
@@ -614,6 +648,25 @@ function renderDial() {
   }
 }
 
+function renderUnlocks() {
+  unlockList.innerHTML = "";
+
+  CLUE_TYPE_CATALOG.forEach((clueType) => {
+    const isUnlocked = state.unlockedClueTypes.includes(clueType.type);
+    const item = document.createElement("li");
+    item.className = `unlock-item ${isUnlocked ? "unlocked" : "locked"}`;
+
+    const name = document.createElement("strong");
+    name.textContent = isUnlocked ? clueType.label : "??? KEY";
+
+    const status = document.createElement("span");
+    status.textContent = isUnlocked ? "decoded" : "crack more safes to decode";
+
+    item.append(name, status);
+    unlockList.append(item);
+  });
+}
+
 function renderClues() {
   clueList.innerHTML = "";
 
@@ -704,6 +757,7 @@ function render() {
   updateDialSpin();
   updateDialNotice();
   renderClues();
+  renderUnlocks();
   renderControls();
   renderDiagnostics();
 }

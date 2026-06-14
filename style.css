@@ -491,6 +491,49 @@ h2 {
   line-height: 1.35;
 }
 
+.unlock-panel {
+  margin-top: 1rem;
+}
+
+.unlock-list {
+  display: grid;
+  gap: 0.35rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.unlock-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  border: 1px solid rgba(155, 245, 178, 0.18);
+  border-radius: 10px;
+  padding: 0.45rem 0.55rem;
+  background: rgba(0, 0, 0, 0.18);
+}
+
+.unlock-item strong {
+  color: var(--crt);
+  letter-spacing: 0.08em;
+}
+
+.unlock-item span {
+  color: var(--muted);
+  font-size: 0.78rem;
+  text-align: right;
+}
+
+.unlock-item.locked {
+  border-color: rgba(255, 255, 255, 0.1);
+  opacity: 0.62;
+}
+
+.unlock-item.locked strong {
+  color: rgba(255, 255, 255, 0.62);
+}
+
 @keyframes dialPulse {
   0% {
     filter: brightness(1);
