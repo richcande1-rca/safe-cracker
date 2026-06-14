@@ -6,6 +6,17 @@ const SLOT_LABELS = ["A", "B", "C"];
 const GENERATED_CLUE_COUNT = 4;
 const GENERATED_SAFE_ATTEMPTS = 400;
 const STARTING_CLUE_TYPES = ["sum", "offset", "scale", "parity"];
+const CLUE_TYPE_CATALOG = [
+  { type: "sum", label: "SUM KEY" },
+  { type: "offset", label: "OFFSET KEY" },
+  { type: "scale", label: "SCALE KEY" },
+  { type: "parity", label: "PARITY KEY" },
+  { type: "gap", label: "GAP KEY" },
+  { type: "order", label: "ORDER KEY" },
+  { type: "count", label: "COUNT KEY" },
+  { type: "separation", label: "SEPARATION KEY" },
+  { type: "value", label: "VALUE KEY" },
+];
 
 const puzzleBank = [
   {
